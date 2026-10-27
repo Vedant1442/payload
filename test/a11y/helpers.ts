@@ -511,6 +511,7 @@ export async function navigateScreenReaderTo({
   maxSteps = 150,
   screenReader,
   shouldEnterDialogs = false,
+  shouldMoveCursorToKeyboardFocus = false,
   shouldResetCursor = true,
   startAt,
 }: {
@@ -518,6 +519,7 @@ export async function navigateScreenReaderTo({
   maxSteps?: number
   screenReader: ScreenReaderPlaywright
   shouldEnterDialogs?: boolean
+  shouldMoveCursorToKeyboardFocus?: boolean
   shouldResetCursor?: boolean
   startAt?: Locator
 }) {
@@ -530,7 +532,7 @@ export async function navigateScreenReaderTo({
   if (startAt) {
     await captureScreenReader({ action: () => startAt.focus(), screenReader })
     await expect(startAt).toBeFocused()
-    if (screenReader.name === 'VoiceOver') {
+    if (shouldMoveCursorToKeyboardFocus && screenReader.name === 'VoiceOver') {
       const { voiceOverKeyCodeCommands } = await import('@guidepup/guidepup')
 
       // DOM focus does not establish the VoiceOver cursor's starting position.

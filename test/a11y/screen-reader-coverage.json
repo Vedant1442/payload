@@ -173,7 +173,44 @@
       "duration": "7.6 seconds",
       "command": "PORT=3001 MONGODB_URL=<isolated test database> pnpm test:e2e a11y --grep 'should describe automatic search before input and retain focus|should preserve accessible names and controls in the native toast content' --workers=1"
     },
-    "historicalScope": "Earlier browser runs were recorded before stacking. Browser references now point to WCAG.audit.spec.ts; use pnpm test:a11y:audit for current runs. Historical command results do not establish the post-stack baseline."
+    "historicalScope": "Earlier browser runs were recorded before stacking. Browser references now point to WCAG.audit.spec.ts; use pnpm test:a11y:audit for current runs. Historical command results do not establish the post-stack baseline.",
+    "latestTargetedScreenReaderRun": {
+      "date": "2026-10-27",
+      "commit": "16c47875b38d447f629bbd8043ab3b088b014410",
+      "source": "User-relayed Claude report; original native artifacts remain on the remote laptop.",
+      "log": "/tmp/pyld-screen-reader-full-logs/targeted-rerun2-20261027-155426.log",
+      "totals": {
+        "run": 4,
+        "passed": 2,
+        "failed": 2
+      },
+      "results": [
+        {
+          "test": "should announce associated labels for the duplicate locale checkboxes",
+          "status": "failed",
+          "duration": "2.4 minutes",
+          "observation": "Requested Close anchor; current item scroll area, prior menu speech, repeated 12 times. Previously passed on baseline eacc584715."
+        },
+        {
+          "test": "should announce the associated label for the deletion checkbox",
+          "status": "passed",
+          "duration": "1.8 minutes",
+          "observation": "Starts at Confirm deletion heading; reaches the checkbox by index 3. Does not prove literal initial alignment to the input."
+        },
+        {
+          "test": "should expose disabled row-menu actions to screen-reader navigation",
+          "status": "failed",
+          "duration": "2.6 minutes",
+          "observation": "Current item scroll area, speech mentions Duplicate, scan leaves menu and exhausts budget. A speech/item mismatch alone does not establish a correct current cursor position."
+        },
+        {
+          "test": "should keep the disabled Group by sort control in screen-reader navigation",
+          "status": "passed",
+          "duration": "1.7 minutes",
+          "observation": "Close button is both current item and spoken phrase at index 0."
+        }
+      ]
+    }
   },
   "earlierMigrations": [
     {
@@ -1636,6 +1673,13 @@
       ],
       "verification": "Lint and four-case discovery passed. Runtime import confirms the installed SDK exports moveCursorToKeyboardFocus as VO-Shift-F4. No AT execution on this laptop; remote verification remains pending.",
       "next": "Run deletion-checkbox and disabled-row-menu cases once, plus the previously passing duplicate-locale and Group-by anchor regressions. Collect original Group A/D final cursor and pending-action evidence from saved artifacts without rerunning those failures."
+    },
+    "cursorAlignmentFollowUp": {
+      "date": "2026-10-27",
+      "observation": "Global cursor-to-keyboard-focus alignment produced a mixed result: deletion passed, Group-by stayed passing, duplicate locale regressed and disabled row actions still failed. This is not evidence of a general fix or a proven single root cause.",
+      "change": "Make explicit VoiceOver cursor alignment opt-in, enabled only for the deletion-checkbox scenario that passed. Other anchors use the previous no-alignment path. Keep DOM focus verification.",
+      "limits": "Current shared-helper change is not AT-verified on this laptop. Original single-stop requirements remain partial. No extra traversal steps or generic scroll-area acceptance were added.",
+      "next": "Pause reruns; extract the requested final cursor logs and timeout/teardown ordering for the original Group A failures, and the pending action for Group D, from already saved artifacts."
     }
   },
   "stackMigration": {

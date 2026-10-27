@@ -145,6 +145,7 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
           maxSteps: 12,
           screenReader,
           shouldEnterDialogs: true,
+          shouldMoveCursorToKeyboardFocus: true,
           shouldResetCursor: screenReader.name !== 'VoiceOver',
           startAt: checkbox,
         })
