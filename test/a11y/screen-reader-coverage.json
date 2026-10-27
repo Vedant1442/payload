@@ -14,33 +14,34 @@
     "screenReaderRun": "Not run on this laptop; do not infer AT success from browser assertions.",
     "screenReaderDiscovery": {
       "before": 54,
-      "after": 21
+      "after": 22
     },
     "followUpBrowserRun": {
       "status": "passed",
       "tests": [
-        "WCAG.e2e.spec.ts :: should describe automatic search before input and retain focus",
-        "WCAG.e2e.spec.ts :: should preserve accessible names and controls in the native toast content"
+        "WCAG.audit.spec.ts :: should describe automatic search before input and retain focus",
+        "WCAG.audit.spec.ts :: should preserve accessible names and controls in the native toast content"
       ],
       "date": "2026-10-21",
       "browser": "Chromium",
       "passed": 2,
       "duration": "7.6 seconds",
       "command": "PORT=3001 MONGODB_URL=<isolated test database> pnpm test:e2e a11y --grep 'should describe automatic search before input and retain focus|should preserve accessible names and controls in the native toast content' --workers=1"
-    }
+    },
+    "historicalScope": "Earlier browser runs were recorded before stacking. Browser references now point to WCAG.audit.spec.ts; use pnpm test:a11y:audit for current runs. Historical command results do not establish the post-stack baseline."
   },
   "earlierMigrations": [
     {
       "ticket": "PYLD-3572",
       "tests": [
-        "WCAG.e2e.spec.ts :: should preserve dashboard focus and expose widget content and independent actions while editing"
+        "WCAG.audit.spec.ts :: should preserve dashboard focus and expose widget content and independent actions while editing"
       ],
       "manual": "User confirmed error announcement on the focused card and keyboard transition to drag handle in Playwright WebKit with VoiceOver."
     },
     {
       "ticket": "PYLD-3689",
       "tests": [
-        "WCAG.e2e.spec.ts :: should give the Copy to locale dialog a concise accessible name without repeating its contents"
+        "WCAG.audit.spec.ts :: should give the Copy to locale dialog a concise accessible name without repeating its contents"
       ],
       "manual": "NVDA opening announcement remains unverified; concise DOM name/description does not prove absence of duplicate speech."
     }
@@ -84,8 +85,8 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should contain keyboard focus in media and nested folder modals",
-        "WCAG.e2e.spec.ts :: should isolate modal content and restore focus after nested dismissal"
+        "WCAG.audit.spec.ts :: should contain keyboard focus in media and nested folder modals",
+        "WCAG.audit.spec.ts :: should isolate modal content and restore focus after nested dismissal"
       ],
       "limits": "Virtual cursor containment not proved by DOM focus traps; 160 moves per case definition is expensive, needs scope/bounds. Guidepup case retired by user decision; browser assertions do not prove the original virtual-cursor/speech outcome. Required manual verification is pending.",
       "manualVerification": "Verify forward/reverse virtual-cursor progress through distinct controls in both real dialogs and no access to the background. The isolation browser test does not itself exercise the media dialogs."
@@ -97,7 +98,7 @@
       "expected": "Asterisk for required Alt field announced as 'star' instead of required. WCAG 1.1.1. (Asana section: Untitled section)",
       "reportedScreenReaders": [],
       "coverage": "browser-regression",
-      "tests": ["WCAG.e2e.spec.ts :: should expose required state without naming the asterisk"],
+      "tests": ["WCAG.audit.spec.ts :: should expose required state without naming the asterisk"],
       "limits": "Existing required-state and accessible-name regression; do not require exact word choice such as star.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
     },
@@ -109,8 +110,8 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "partial",
       "tests": [
-        "WCAG.e2e.spec.ts :: should pause trash-toast dismissal while its close button has keyboard focus",
-        "WCAG.e2e.spec.ts :: should give a default toast six seconds before automatic dismissal"
+        "WCAG.audit.spec.ts :: should pause trash-toast dismissal while its close button has keyboard focus",
+        "WCAG.audit.spec.ts :: should give a default toast six seconds before automatic dismissal"
       ],
       "limits": "Temporary Sonner patch fixes DOM keyboard-focus persistence, resumption on blur, hover coexistence, and timer cleanup after manual dismissal. Four local Chromium regressions pass; the four requested WebKit browser scenarios also pass in Claude's report. Actual VoiceOver toast navigation and virtual-cursor-only persistence have not yet been verified.",
       "manualVerification": "With VoiceOver, navigate normally to a real trash toast, then verify it remains while being read after mouse hover is removed. Record whether DOM focus follows the VoiceOver cursor; do not assume a purely virtual or keyboard-focused path."
@@ -123,7 +124,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should associate ${form} errors with their fields and focus order"
+        "WCAG.audit.spec.ts :: should associate ${form} errors with their fields and focus order"
       ],
       "limits": "Document error reading order retains its AT regression. Login error associations and keyboard order remain in the browser regression; post-submission edit-and-clear was manually verified with VoiceOver for PYLD-3613. Guidepup case retired by user decision; browser assertions do not prove the original virtual-cursor/speech outcome. Required manual verification is pending.",
       "manualVerification": "On the real document create form, submit empty and verify the required title error is reachable adjacent to its field in normal forward/reverse reading order. The recorded login check is not document-form evidence."
@@ -149,7 +150,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the selected folder as the current creation location"
+        "WCAG.audit.spec.ts :: should expose the selected folder as the current creation location"
       ],
       "limits": "Browser regression checks the folder checkbox's accessible name and checked state, plus aria-current=location on the selected folder.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -162,8 +163,8 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should contain keyboard focus in media and nested folder modals",
-        "WCAG.e2e.spec.ts :: should isolate modal content and restore focus after nested dismissal"
+        "WCAG.audit.spec.ts :: should contain keyboard focus in media and nested folder modals",
+        "WCAG.audit.spec.ts :: should isolate modal content and restore focus after nested dismissal"
       ],
       "limits": "Nested virtual cursor containment; retain actual browse evidence. Guidepup case retired by user decision; browser assertions do not prove the original virtual-cursor/speech outcome. Required manual verification is pending.",
       "manualVerification": "Verify forward/reverse virtual-cursor progress through the nested location modal without entering the parent drawer or page."
@@ -189,7 +190,7 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the default login logo as an image named Payload"
+        "WCAG.audit.spec.ts :: should expose the default login logo as an image named Payload"
       ],
       "limits": "Existing named-image browser regression; retain separate NVDA browse-cursor confirmation if discovery remains disputed.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -202,7 +203,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression-with-manual-at",
       "tests": [
-        "WCAG.e2e.spec.ts :: should associate ${form} errors with their fields and focus order"
+        "WCAG.audit.spec.ts :: should associate ${form} errors with their fields and focus order"
       ],
       "limits": "The returning password error is covered after an initial failed submission, correction, and clearing without resubmission. Browser assertions cover error visibility, association, invalid state, and keyboard order. User-confirmed VoiceOver behavior covers automatic announcement and forward/backward keyboard access in Playwright WebKit. A fresh unsubmitted form renders no error under the pre-existing submission gate; that literal historical trigger remains unreproduced.",
       "manualVerification": "User confirmed on 2026-10-21: error auto-announces when clearing by mouse and by Cmd+A/Delete; Shift+Tab from Password reaches it directly; forward Tab from Email encounters it before Password. VO-Left/Right inside text editing remains within the text, rather than proving a trap. Exact browser/OS/AT versions were not recorded."
@@ -215,7 +216,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "screen-reader-regression-retained",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose global API depth stepper changes as a status",
+        "WCAG.audit.spec.ts :: should expose global API depth stepper changes as a status",
         "screen-reader.spec.ts :: should announce global API depth changes while focus stays on the stepper"
       ],
       "limits": "Depth value spontaneous speech without moving focus.",
@@ -229,7 +230,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the selected Add Blocks option by name and pressed state"
+        "WCAG.audit.spec.ts :: should expose the selected Add Blocks option by name and pressed state"
       ],
       "limits": "Browser Add Blocks regression checks the option name and aria-pressed false-to-true transition; speech remains a reported-platform manual check.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -242,8 +243,8 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "screen-reader-regression-retained",
       "tests": [
-        "WCAG.e2e.spec.ts :: should drop a keyboard-dragged ${kind} row at its new position",
-        "WCAG.e2e.spec.ts :: should cancel ${kind} keyboard dragging after moving in both directions",
+        "WCAG.audit.spec.ts :: should drop a keyboard-dragged ${kind} row at its new position",
+        "WCAG.audit.spec.ts :: should cancel ${kind} keyboard dragging after moving in both directions",
         "screen-reader.spec.ts :: should drop the ${kind} row with the screen reader active"
       ],
       "limits": "Two cases. Keys with active AT are part of the reported failure; ordinary keyboard drag doesn't replace this.",
@@ -257,7 +258,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "screen-reader-regression-retained",
       "tests": [
-        "WCAG.e2e.spec.ts :: should cancel ${kind} keyboard dragging after moving in both directions",
+        "WCAG.audit.spec.ts :: should cancel ${kind} keyboard dragging after moving in both directions",
         "screen-reader.spec.ts :: should announce relative direction and position while dragging the ${kind} row"
       ],
       "limits": "Dynamic direction and relative position speech; nested queued press inside capture must be removed before execution.",
@@ -271,7 +272,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should describe pickup movement drop and cancellation for ${kind} dragging"
+        "WCAG.audit.spec.ts :: should describe pickup movement drop and cancellation for ${kind} dragging"
       ],
       "limits": "Two parameterized cases; browser accessible-description checks include platform-specific instructions.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -284,8 +285,8 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should identify the ${kind} row on its drag control",
-        "WCAG.e2e.spec.ts :: should drop a keyboard-dragged ${kind} row at its new position"
+        "WCAG.audit.spec.ts :: should identify the ${kind} row on its drag control",
+        "WCAG.audit.spec.ts :: should drop a keyboard-dragged ${kind} row at its new position"
       ],
       "limits": "Browser regressions check the row's drag-control name and the named pickup message in the live region. Exact AT speech still needs reported-platform confirmation.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -298,7 +299,7 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should reorder widgets using the dedicated keyboard drag control"
+        "WCAG.audit.spec.ts :: should reorder widgets using the dedicated keyboard drag control"
       ],
       "limits": "The ticket starts with Space on the focused widget frame. The test directly focuses the separate drag handle. The revised keyboard workflow needs explicit verification; a handle-only pass is narrower evidence. NVDA automation retired by user decision because existing browser regressions are runnable; original reported Windows/NVDA verification remains outstanding.",
       "manualVerification": "Manual Windows/NVDA check pending. Outstanding: reproduce the original cursor grouping or frame-keyboard scenario; the current narrower assertion is not proof of the full remedy."
@@ -311,7 +312,7 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "screen-reader-regression-retained",
       "tests": [
-        "WCAG.e2e.spec.ts :: should isolate modal content and restore focus after nested dismissal",
+        "WCAG.audit.spec.ts :: should isolate modal content and restore focus after nested dismissal",
         "screen-reader.spec.ts :: should move the screen-reader cursor into the add-widget drawer upon opening"
       ],
       "limits": "Automatic screen-reader cursor entry, not just DOM focus.",
@@ -325,12 +326,12 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should visit every theme option with arrow keys including the middle option",
-        "WCAG.e2e.spec.ts :: should navigate User menu items without entering hidden submenus",
-        "WCAG.e2e.spec.ts :: should close the full User menu chain when tabbing from a nested menu",
-        "WCAG.e2e.spec.ts :: should restore visible focus when shift-tabbing from a nested User menu",
-        "WCAG.e2e.spec.ts :: should move focus into a mobile User menu submenu",
-        "WCAG.e2e.spec.ts :: should expose nested User menu triggers as items in one menu"
+        "WCAG.audit.spec.ts :: should visit every theme option with arrow keys including the middle option",
+        "WCAG.audit.spec.ts :: should navigate User menu items without entering hidden submenus",
+        "WCAG.audit.spec.ts :: should close the full User menu chain when tabbing from a nested menu",
+        "WCAG.audit.spec.ts :: should restore visible focus when shift-tabbing from a nested User menu",
+        "WCAG.audit.spec.ts :: should move focus into a mobile User menu submenu",
+        "WCAG.audit.spec.ts :: should expose nested User menu triggers as items in one menu"
       ],
       "limits": "Browser Theme regression checks exactly one selected radio option, changes selection, verifies checked state, and restores the prior preference.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -343,7 +344,7 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should omit a finished relationship loading indicator from the accessibility tree"
+        "WCAG.audit.spec.ts :: should omit a finished relationship loading indicator from the accessibility tree"
       ],
       "limits": "Actual NVDA last-field-to-next-object navigation remains unverified; browser exclusion is not native screen-reader cursor evidence.",
       "manualVerification": "Outstanding Windows/NVDA reported-platform verification. Actual NVDA last-field-to-next-object navigation remains unverified; browser exclusion is not native screen-reader cursor evidence."
@@ -356,8 +357,8 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose named options in the relationship field",
-        "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
+        "WCAG.audit.spec.ts :: should expose named options in the relationship field",
+        "WCAG.audit.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
       ],
       "limits": "Option names and accessibility-tree presence are tested; exact NVDA browse-mode speech remains unverified.",
       "manualVerification": "Outstanding Windows/NVDA reported-platform verification. Option names and accessibility-tree presence are tested; exact NVDA browse-mode speech remains unverified."
@@ -370,7 +371,7 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the active sort direction on relationship table headers and buttons"
+        "WCAG.audit.spec.ts :: should expose the active sort direction on relationship table headers and buttons"
       ],
       "limits": "Existing browser regression checks header name, aria-sort, both button pressed states.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -383,8 +384,8 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should keep drawer filter options inside the active modal accessibility tree",
-        "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
+        "WCAG.audit.spec.ts :: should keep drawer filter options inside the active modal accessibility tree",
+        "WCAG.audit.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
       ],
       "limits": "NVDA browse-mode option naming; correct explicit mode-switch behavior. NVDA automation retired by user decision because existing browser regressions are runnable; original reported Windows/NVDA verification remains outstanding.",
       "manualVerification": "Manual Windows/NVDA check pending. Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence."
@@ -397,7 +398,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "screen-reader-regression-retained",
       "tests": [
-        "WCAG.e2e.spec.ts :: should disable close-control live announcements for the unsaved toast",
+        "WCAG.audit.spec.ts :: should disable close-control live announcements for the unsaved toast",
         "screen-reader.spec.ts :: should announce the unsaved Copy to locale toast without its close button"
       ],
       "limits": "Close button leaking into spontaneous toast speech; aria-live off alone not speech proof.",
@@ -450,7 +451,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "screen-reader-regression-retained",
       "tests": [
-        "WCAG.e2e.spec.ts :: should isolate modal content and restore focus after nested dismissal",
+        "WCAG.audit.spec.ts :: should isolate modal content and restore focus after nested dismissal",
         "screen-reader.spec.ts :: should move the screen-reader cursor into Copy to locale from the overflow menu"
       ],
       "limits": "Overflow-to-drawer virtual cursor location, not just DOM focus.",
@@ -477,14 +478,14 @@
       "reportedScreenReaders": ["VoiceOver", "NVDA"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should position a popup against its trigger inside a transformed drawer",
-        "WCAG.e2e.spec.ts :: should keep an oversized popup within the viewport",
-        "WCAG.e2e.spec.ts :: should keep a side submenu within the viewport",
-        "WCAG.e2e.spec.ts :: should navigate User menu items without entering hidden submenus",
-        "WCAG.e2e.spec.ts :: should close the full User menu chain when tabbing from a nested menu",
-        "WCAG.e2e.spec.ts :: should restore visible focus when shift-tabbing from a nested User menu",
-        "WCAG.e2e.spec.ts :: should move focus into a mobile User menu submenu",
-        "WCAG.e2e.spec.ts :: should expose nested User menu triggers as items in one menu"
+        "WCAG.audit.spec.ts :: should position a popup against its trigger inside a transformed drawer",
+        "WCAG.audit.spec.ts :: should keep an oversized popup within the viewport",
+        "WCAG.audit.spec.ts :: should keep a side submenu within the viewport",
+        "WCAG.audit.spec.ts :: should navigate User menu items without entering hidden submenus",
+        "WCAG.audit.spec.ts :: should close the full User menu chain when tabbing from a nested menu",
+        "WCAG.audit.spec.ts :: should restore visible focus when shift-tabbing from a nested User menu",
+        "WCAG.audit.spec.ts :: should move focus into a mobile User menu submenu",
+        "WCAG.audit.spec.ts :: should expose nested User menu triggers as items in one menu"
       ],
       "limits": "Shared popup automatic virtual focus; avoid giant multi-popup debugging, split only if useful. Guidepup case retired by user decision; browser assertions do not prove the original virtual-cursor/speech outcome. Required manual verification is pending.",
       "manualVerification": "Replace the five-flow sweep with representative popup-local AT arrival coverage and record localization cursor entry manually. Existing drawer-entry AT checks do not prove popup/localization behavior."
@@ -497,7 +498,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the active locale as selected rather than disabled"
+        "WCAG.audit.spec.ts :: should expose the active locale as selected rather than disabled"
       ],
       "limits": "The test counts English once in a focus capture; it does not verify one virtual-cursor stop or compare the selected and unselected locale grouping. Guidepup case retired by user decision; browser assertions do not prove the original virtual-cursor/speech outcome. Required manual verification is pending.",
       "manualVerification": "Verify actual selected/unselected locale browse stops and selected-state announcement on the reported platforms. Counting a word once in focus speech is not grouping evidence."
@@ -510,7 +511,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the active locale as selected rather than disabled"
+        "WCAG.audit.spec.ts :: should expose the active locale as selected rather than disabled"
       ],
       "limits": "Grouping portion is real browse-cursor concern. Current focus capture/exact English occurrence doesn't itself prove one grouped stop; semantics already browser-covered. Guidepup case retired by user decision; browser assertions do not prove the original virtual-cursor/speech outcome. Required manual verification is pending.",
       "manualVerification": "Verify actual selected/unselected locale browse stops and selected-state announcement on the reported platforms. Counting a word once in focus speech is not grouping evidence."
@@ -523,10 +524,10 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should position a popup against its trigger inside a transformed drawer",
-        "WCAG.e2e.spec.ts :: should keep an oversized popup within the viewport",
-        "WCAG.e2e.spec.ts :: should keep a side submenu within the viewport",
-        "WCAG.e2e.spec.ts :: should move keyboard focus into and through the Columns dialog"
+        "WCAG.audit.spec.ts :: should position a popup against its trigger inside a transformed drawer",
+        "WCAG.audit.spec.ts :: should keep an oversized popup within the viewport",
+        "WCAG.audit.spec.ts :: should keep a side submenu within the viewport",
+        "WCAG.audit.spec.ts :: should move keyboard focus into and through the Columns dialog"
       ],
       "limits": "Shared popup automatic virtual focus; avoid giant multi-popup debugging, split only if useful. Guidepup case retired by user decision; browser assertions do not prove the original virtual-cursor/speech outcome. Required manual verification is pending.",
       "manualVerification": "Replace the five-flow sweep with representative popup-local AT arrival coverage and record localization cursor entry manually. Existing drawer-entry AT checks do not prove popup/localization behavior."
@@ -539,7 +540,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the current locale and popup state on the locale selector"
+        "WCAG.audit.spec.ts :: should expose the current locale and popup state on the locale selector"
       ],
       "limits": "Browser regression checks the locale name and expanded/collapsed state on both the collection list and the reported versions view.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -552,7 +553,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should name version table per-page controls with their value and purpose"
+        "WCAG.audit.spec.ts :: should name version table per-page controls with their value and purpose"
       ],
       "limits": "Browser version-table regression checks the selected per-page radio option for both collection and global version tables.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -578,7 +579,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the live-preview zoom name, expansion, and selected option"
+        "WCAG.audit.spec.ts :: should expose the live-preview zoom name, expansion, and selected option"
       ],
       "limits": "Browser zoom regression checks exactly one selected radio option before and after changing zoom; restores the prior zoom.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -591,7 +592,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the live-preview zoom name, expansion, and selected option"
+        "WCAG.audit.spec.ts :: should expose the live-preview zoom name, expansion, and selected option"
       ],
       "limits": "Browser zoom regression checks the trigger's contextual name and expanded/collapsed state before and after selection.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -604,7 +605,7 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the active locale as selected rather than disabled"
+        "WCAG.audit.spec.ts :: should expose the active locale as selected rather than disabled"
       ],
       "limits": "Selected-state semantics have browser coverage, but the report's one-grouped-item requirement is not verified by counting the locale name in one announcement. Guidepup case retired by user decision; browser assertions do not prove the original virtual-cursor/speech outcome. Required manual verification is pending.",
       "manualVerification": "Verify actual selected/unselected locale browse stops and selected-state announcement on the reported platforms. Counting a word once in focus speech is not grouping evidence."
@@ -617,7 +618,7 @@
       "reportedScreenReaders": ["VoiceOver", "NVDA"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should expose the selected Add Blocks option by name and pressed state"
+        "WCAG.audit.spec.ts :: should expose the selected Add Blocks option by name and pressed state"
       ],
       "limits": "Browser Add Blocks regression checks the option name and aria-pressed false-to-true transition; speech remains a reported-platform manual check.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -630,7 +631,7 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should exit Lexical editors with Escape then Tab or Shift+Tab"
+        "WCAG.audit.spec.ts :: should exit Lexical editors with Escape then Tab or Shift+Tab"
       ],
       "limits": "The disclosed keyboard exit path is tested; NVDA browse-arrow escape and literal ArrowUp/ArrowDown exit are not established by this browser test.",
       "manualVerification": "Outstanding Windows/NVDA reported-platform verification. The disclosed keyboard exit path is tested; NVDA browse-arrow escape and literal ArrowUp/ArrowDown exit are not established by this browser test."
@@ -643,8 +644,8 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "browser-regression",
       "tests": [
-        "WCAG.e2e.spec.ts :: should not activate or close disabled row-menu actions",
-        "WCAG.e2e.spec.ts :: should expose the disabled Paste or Replace action by name and menu role"
+        "WCAG.audit.spec.ts :: should not activate or close disabled row-menu actions",
+        "WCAG.audit.spec.ts :: should expose the disabled Paste or Replace action by name and menu role"
       ],
       "limits": "Browser regression checks the action's accessible name, menuitem role, and disabled state. The former speech test incorrectly required the literal word button.",
       "manualVerification": "Browser assertions cover semantics or keyboard behavior; exact speech and browse-cursor behavior remain manual checks on the reported platform."
@@ -657,8 +658,8 @@
       "reportedScreenReaders": ["VoiceOver", "NVDA"],
       "coverage": "screen-reader-regression-retained",
       "tests": [
-        "WCAG.e2e.spec.ts :: should not activate or close disabled row-menu actions",
-        "WCAG.e2e.spec.ts :: should expose only one menu item at a time in the tab order",
+        "WCAG.audit.spec.ts :: should not activate or close disabled row-menu actions",
+        "WCAG.audit.spec.ts :: should expose only one menu item at a time in the tab order",
         "screen-reader.spec.ts :: should expose disabled row-menu actions to screen-reader navigation"
       ],
       "limits": "Disabled menu-item browse discoverability can't be replaced by nonactivation checks.",
@@ -709,7 +710,7 @@
       "reportedScreenReaders": ["NVDA"],
       "coverage": "screen-reader-regression-retained",
       "tests": [
-        "WCAG.e2e.spec.ts :: should describe automatic search before input and retain focus",
+        "WCAG.audit.spec.ts :: should describe automatic search before input and retain focus",
         "screen-reader.spec.ts :: should announce table search result changes without moving focus"
       ],
       "limits": "Browser regression checks the advance automatic-search description for both list and Columns inputs, resulting UI, and retained focus. The retained table-result AT regression covers actual table speech. The Columns hint still needs manual NVDA confirmation.",
@@ -744,19 +745,19 @@
   ],
   "remainingScreenReaderReview": {
     "date": "2026-10-21",
-    "scope": "Static review initially covered 37 expanded cases at commit 203e115335. Sixteen were subsequently retired with explicit browser replacements and recorded manual limits; cases tracks the 21 remaining cases and retiredCases preserves all sixteen decisions.",
+    "scope": "The original review tracks 21 retained cases plus one save-announcement case inherited from PR #19005 / #18845. Sixteen retirement records preserve the original decisions. All 22 current cases are Mac-eligible; inherited coverage is not retroactively counted as a verified AT pass.",
     "interpretation": "Retain means the observable outcome justifies AT evidence, not that the test has passed or proves conformance. Strengthen means current assertions have a concrete false-pass, false-failure, scope, or cursor-start risk.",
     "counts": {
-      "retain-at": 10,
+      "retain-at": 11,
       "scenario-gap": 2,
       "strengthen-at": 9
     },
     "platformInventory": {
-      "total": 21,
+      "total": 22,
       "nvdaOnly": 0,
       "voiceOverOnly": 1,
-      "both": 20,
-      "note": "All 21 remaining Guidepup cases are Mac-eligible. Twenty can also run on Windows; the widget-control cursor case is VoiceOver-only. Retiring Windows-only cases does not establish their NVDA outcomes."
+      "both": 21,
+      "note": "All 22 current cases are Mac-eligible. Twenty-one support both readers; widget-control navigation is VoiceOver-only. Includes one new save-announcement case inherited from the parent stack."
     },
     "sharedRisks": [
       {
@@ -990,6 +991,16 @@
         "decision": "retain-at",
         "finding": "The real folder-search submission and resulting count are captured while focus and URL remain stable; this addresses an unsolicited result announcement.",
         "next": "Keep; inspect actual speech and live-region update before interpreting a capture failure as a product bug."
+      },
+      {
+        "test": "should announce a successful document save without moving the screen-reader cursor",
+        "title": "should announce a successful document save without moving the screen-reader cursor",
+        "scenario": null,
+        "screenReaders": "VoiceOver and NVDA",
+        "tickets": [],
+        "decision": "retain-at",
+        "finding": "Inherited from the parent accessibility workflow stack; checks spontaneous save speech, persisted data and stable screen-reader/DOM focus. Not part of the original 50-ticket retirement audit.",
+        "next": "Verify with Guidepup on the supported laptop; no AT pass is claimed by the stack migration."
       }
     ],
     "retiredCases": [
@@ -1003,7 +1014,7 @@
         "finding": "The browser test already checks the advance automatic-search description for both search inputs. Table result speech is checked more thoroughly by the dedicated PYLD-3696 AT test.",
         "next": "Promote browser hint coverage for PYLD-3773 and link relevant table speech coverage before removing this overlapping AT case. Preserve a manual check for the Columns hint if needed.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should describe automatic search before input and retain focus",
+          "WCAG.audit.spec.ts :: should describe automatic search before input and retain focus",
           "screen-reader.spec.ts :: should announce table search result changes without moving focus"
         ],
         "manualLimit": "Exact automatic speech remains a manual reported-platform check; browser assertions do not prove synthesized output."
@@ -1018,7 +1029,7 @@
         "finding": "An existing browser regression already checks the custom toast's named image, controls, hidden-label resolution, and keyboard accessibility. This additional unticketed test requires all those names in an automatic announcement.",
         "next": "Use the existing browser regression plus a recorded manual spontaneous-announcement check; retain a separate AT test only for a concrete speech regression not covered by the real unsaved-toast case.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should preserve accessible names and controls in the native toast content"
+          "WCAG.audit.spec.ts :: should preserve accessible names and controls in the native toast content"
         ],
         "manualLimit": "Exact automatic speech remains a manual reported-platform check; browser assertions do not prove synthesized output."
       },
@@ -1032,7 +1043,7 @@
         "finding": "The original form-error adjacency outcome is virtual reading order. The helper uses DOM blur/focus then a three-step scan, without verifying that the screen-reader cursor actually starts at the intended field.",
         "next": "Keep the document case and complementary browser associations; verify the AT starting field. The login variant does not replace the separate edit-and-clear requirement in PYLD-3613.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should associate ${form} errors with their fields and focus order"
+          "WCAG.audit.spec.ts :: should associate ${form} errors with their fields and focus order"
         ],
         "manualLimit": "User confirmed the returning error auto-announces and is reachable in forward/backward keyboard order in Playwright WebKit with VoiceOver after one failed submission. A fresh-form pre-submit error was not reproduced."
       },
@@ -1046,7 +1057,7 @@
         "finding": "The error is captured only after clicking Login; the original report concerns the password being typed and cleared, prior to submission.",
         "next": "Claude is investigating the exact browser scenario separately; do not change the scenario to force a pass.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should associate ${form} errors with their fields and focus order"
+          "WCAG.audit.spec.ts :: should associate ${form} errors with their fields and focus order"
         ],
         "manualLimit": "User confirmed the returning error auto-announces and is reachable in forward/backward keyboard order in Playwright WebKit with VoiceOver after one failed submission. A fresh-form pre-submit error was not reproduced."
       },
@@ -1060,7 +1071,7 @@
         "finding": "Unticketed synthetic speech assertion; no established requirement to announce every rapid notification. Browser coverage preserves both messages in the live region; real unsaved-toast speech coverage remains.",
         "next": "Browser checks do not prove both rapid notifications are spoken. No manual speech result is claimed.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should retain both rapid toast messages in the native live region"
+          "WCAG.audit.spec.ts :: should retain both rapid toast messages in the native live region"
         ],
         "manualLimit": "Browser checks do not prove both rapid notifications are spoken. No manual speech result is claimed.",
         "retiredDate": "2026-10-23"
@@ -1075,8 +1086,8 @@
         "finding": "This test never places the screen-reader cursor on the toast, so its dismissal assertion does not reproduce PYLD-3580. Browser regressions cover DOM-focus persistence and default dismissal.",
         "next": "VoiceOver cursor persistence and the real trash announcement remain unverified. The ticket remains partial; the branch-local dependency patch must be replaced before the final PR.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should pause trash-toast dismissal while its close button has keyboard focus",
-          "WCAG.e2e.spec.ts :: should give a default toast six seconds before automatic dismissal"
+          "WCAG.audit.spec.ts :: should pause trash-toast dismissal while its close button has keyboard focus",
+          "WCAG.audit.spec.ts :: should give a default toast six seconds before automatic dismissal"
         ],
         "manualLimit": "VoiceOver cursor persistence and the real trash announcement remain unverified. The ticket remains partial; the branch-local dependency patch must be replaced before the final PR.",
         "retiredDate": "2026-10-23"
@@ -1091,7 +1102,7 @@
         "finding": "Counting English once in one focus capture proves neither one virtual-cursor stop nor grouping relative to the unselected locale. The selected/not-disabled state does have browser and focus-speech evidence.",
         "next": "Verify actual selected/unselected locale browse stops and selected-state announcement on the reported platforms. Counting a word once in focus speech is not grouping evidence.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should expose the active locale as selected rather than disabled"
+          "WCAG.audit.spec.ts :: should expose the active locale as selected rather than disabled"
         ],
         "manualLimit": "Not yet verified manually: Verify actual selected/unselected locale browse stops and selected-state announcement on the reported platforms. Counting a word once in focus speech is not grouping evidence.",
         "retiredDate": "2026-10-23"
@@ -1106,7 +1117,7 @@
         "finding": "The retained document case checks the original document-submission reading-order report. The helper still starts from DOM focus without first verifying the AT cursor position.",
         "next": "On the real document create form, submit empty and verify the required title error is reachable adjacent to its field in normal forward/reverse reading order. The recorded login check is not document-form evidence.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should associate ${form} errors with their fields and focus order"
+          "WCAG.audit.spec.ts :: should associate ${form} errors with their fields and focus order"
         ],
         "manualLimit": "Not yet verified manually: On the real document create form, submit empty and verify the required title error is reachable adjacent to its field in normal forward/reverse reading order. The recorded login check is not document-form evidence.",
         "retiredDate": "2026-10-23"
@@ -1121,8 +1132,8 @@
         "finding": "The fixed 40-forward/40-backward scans do not require progress or distinct expected controls. A cursor repeating Add files or Crop can pass the positive/negative word checks. Background-name blacklists can also reject legitimate modal content.",
         "next": "Verify forward/reverse virtual-cursor progress through distinct controls in both real dialogs and no access to the background. The isolation browser test does not itself exercise the media dialogs.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should contain keyboard focus in media and nested folder modals",
-          "WCAG.e2e.spec.ts :: should isolate modal content and restore focus after nested dismissal"
+          "WCAG.audit.spec.ts :: should contain keyboard focus in media and nested folder modals",
+          "WCAG.audit.spec.ts :: should isolate modal content and restore focus after nested dismissal"
         ],
         "manualLimit": "Not yet verified manually: Verify forward/reverse virtual-cursor progress through distinct controls in both real dialogs and no access to the background. The isolation browser test does not itself exercise the media dialogs.",
         "retiredDate": "2026-10-23"
@@ -1137,8 +1148,8 @@
         "finding": "Like the media scan, this can pass while repeating one in-modal item and does not demonstrate traversal through the modal.",
         "next": "Verify forward/reverse virtual-cursor progress through the nested location modal without entering the parent drawer or page.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should contain keyboard focus in media and nested folder modals",
-          "WCAG.e2e.spec.ts :: should isolate modal content and restore focus after nested dismissal"
+          "WCAG.audit.spec.ts :: should contain keyboard focus in media and nested folder modals",
+          "WCAG.audit.spec.ts :: should isolate modal content and restore focus after nested dismissal"
         ],
         "manualLimit": "Not yet verified manually: Verify forward/reverse virtual-cursor progress through the nested location modal without entering the parent drawer or page.",
         "retiredDate": "2026-10-23"
@@ -1153,7 +1164,7 @@
         "finding": "The helper checks generic captured item words such as Title or Field. Those may appear in background content and do not establish popup-local arrival. Five popup flows also make one failure expensive to diagnose.",
         "next": "Replace the five-flow sweep with representative popup-local AT arrival coverage and record localization cursor entry manually. Existing drawer-entry AT checks do not prove popup/localization behavior.",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should move keyboard focus into and through the Columns dialog"
+          "WCAG.audit.spec.ts :: should move keyboard focus into and through the Columns dialog"
         ],
         "manualLimit": "Not yet verified manually: Replace the five-flow sweep with representative popup-local AT arrival coverage and record localization cursor entry manually. Existing drawer-entry AT checks do not prove popup/localization behavior.",
         "retiredDate": "2026-10-23"
@@ -1169,7 +1180,7 @@
         "next": "Outstanding: reproduce the original cursor grouping or frame-keyboard scenario; the current narrower assertion is not proof of the full remedy.",
         "retiredDate": "2026-10-27",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should reorder widgets using the dedicated keyboard drag control"
+          "WCAG.audit.spec.ts :: should reorder widgets using the dedicated keyboard drag control"
         ],
         "manualLimit": "NVDA/Windows verification remains outstanding; this laptop cannot run NVDA. Existing browser checks do not prove NVDA speech, browse navigation or interception of keys."
       },
@@ -1184,8 +1195,8 @@
         "next": "Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence.",
         "retiredDate": "2026-10-27",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should keep drawer filter options inside the active modal accessibility tree",
-          "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
+          "WCAG.audit.spec.ts :: should keep drawer filter options inside the active modal accessibility tree",
+          "WCAG.audit.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
         ],
         "manualLimit": "NVDA/Windows verification remains outstanding; this laptop cannot run NVDA. Existing browser checks do not prove NVDA speech, browse navigation or interception of keys."
       },
@@ -1200,7 +1211,7 @@
         "next": "Retain browser regressions and obtain reported-platform manual evidence if claiming the original NVDA outcome is verified.",
         "retiredDate": "2026-10-27",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should omit a finished relationship loading indicator from the accessibility tree"
+          "WCAG.audit.spec.ts :: should omit a finished relationship loading indicator from the accessibility tree"
         ],
         "manualLimit": "Actual NVDA last-field-to-next-object navigation remains unverified; browser exclusion is not native screen-reader cursor evidence."
       },
@@ -1215,7 +1226,7 @@
         "next": "Retain browser regressions and obtain reported-platform manual evidence if claiming the original NVDA outcome is verified.",
         "retiredDate": "2026-10-27",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should exit Lexical editors with Escape then Tab or Shift+Tab"
+          "WCAG.audit.spec.ts :: should exit Lexical editors with Escape then Tab or Shift+Tab"
         ],
         "manualLimit": "The disclosed keyboard exit path is tested; NVDA browse-arrow escape and literal ArrowUp/ArrowDown exit are not established by this browser test."
       },
@@ -1230,8 +1241,8 @@
         "next": "Retain browser regressions and obtain reported-platform manual evidence if claiming the original NVDA outcome is verified.",
         "retiredDate": "2026-10-27",
         "replacementTests": [
-          "WCAG.e2e.spec.ts :: should expose named options in the relationship field",
-          "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
+          "WCAG.audit.spec.ts :: should expose named options in the relationship field",
+          "WCAG.audit.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
         ],
         "manualLimit": "Option names and accessibility-tree presence are tested; exact NVDA browse-mode speech remains unverified."
       }
@@ -1261,7 +1272,7 @@
           "tickets": ["PYLD-3581"],
           "status": "retired-manual-verification-pending",
           "replacementTests": [
-            "WCAG.e2e.spec.ts :: should associate ${form} errors with their fields and focus order"
+            "WCAG.audit.spec.ts :: should associate ${form} errors with their fields and focus order"
           ],
           "required": "On the real document create form, submit empty and verify the required title error is reachable adjacent to its field in normal forward/reverse reading order. The recorded login check is not document-form evidence."
         },
@@ -1270,8 +1281,8 @@
           "tickets": ["PYLD-3575"],
           "status": "retired-manual-verification-pending",
           "replacementTests": [
-            "WCAG.e2e.spec.ts :: should contain keyboard focus in media and nested folder modals",
-            "WCAG.e2e.spec.ts :: should isolate modal content and restore focus after nested dismissal"
+            "WCAG.audit.spec.ts :: should contain keyboard focus in media and nested folder modals",
+            "WCAG.audit.spec.ts :: should isolate modal content and restore focus after nested dismissal"
           ],
           "required": "Verify forward/reverse virtual-cursor progress through distinct controls in both real dialogs and no access to the background. The isolation browser test does not itself exercise the media dialogs."
         },
@@ -1280,8 +1291,8 @@
           "tickets": ["PYLD-3587"],
           "status": "retired-manual-verification-pending",
           "replacementTests": [
-            "WCAG.e2e.spec.ts :: should contain keyboard focus in media and nested folder modals",
-            "WCAG.e2e.spec.ts :: should isolate modal content and restore focus after nested dismissal"
+            "WCAG.audit.spec.ts :: should contain keyboard focus in media and nested folder modals",
+            "WCAG.audit.spec.ts :: should isolate modal content and restore focus after nested dismissal"
           ],
           "required": "Verify forward/reverse virtual-cursor progress through the nested location modal without entering the parent drawer or page."
         },
@@ -1290,7 +1301,7 @@
           "tickets": ["PYLD-3699", "PYLD-3700", "PYLD-3730"],
           "status": "retired-manual-verification-pending",
           "replacementTests": [
-            "WCAG.e2e.spec.ts :: should expose the active locale as selected rather than disabled"
+            "WCAG.audit.spec.ts :: should expose the active locale as selected rather than disabled"
           ],
           "required": "Verify actual selected/unselected locale browse stops and selected-state announcement on the reported platforms. Counting a word once in focus speech is not grouping evidence."
         },
@@ -1299,7 +1310,7 @@
           "tickets": ["PYLD-3697", "PYLD-3701"],
           "status": "retired-manual-verification-pending",
           "replacementTests": [
-            "WCAG.e2e.spec.ts :: should move keyboard focus into and through the Columns dialog"
+            "WCAG.audit.spec.ts :: should move keyboard focus into and through the Columns dialog"
           ],
           "required": "Replace the five-flow sweep with representative popup-local AT arrival coverage and record localization cursor entry manually. Existing drawer-entry AT checks do not prove popup/localization behavior."
         }
@@ -1319,7 +1330,7 @@
         "browser": "Chromium",
         "passed": 1,
         "duration": "8.5 seconds",
-        "test": "WCAG.e2e.spec.ts :: should associate ${form} errors with their fields and focus order",
+        "test": "WCAG.audit.spec.ts :: should associate ${form} errors with their fields and focus order",
         "variant": "login",
         "command": "PORT=3001 MONGODB_URL=<isolated test database> pnpm test:e2e a11y --grep 'should associate login errors with their fields and focus order' --workers=1"
       },
@@ -1358,7 +1369,7 @@
         "result": "Reproduced: the focused Close toast button and its toast disappear after the default timeout.",
         "command": "PORT=3001 MONGODB_URL=<isolated test database> pnpm test:e2e a11y --grep 'should pause trash-toast dismissal while its close button has keyboard focus' --workers=1",
         "failure": "The initial toast visibility and Close button focus assertions pass. After seven seconds, the required toast visibility assertion fails because the toast has been removed.",
-        "branchState": "Included in WCAG.e2e.spec.ts with the temporary dependency fix; previously reproduced the defect and now passes."
+        "branchState": "Included in WCAG.audit.spec.ts with the temporary dependency fix; previously reproduced the defect and now passes."
       },
       "temporaryFix": {
         "patch": "patches/sonner@1.7.4.patch",
@@ -1448,6 +1459,31 @@
         "screenReaderDiscovery": 21,
         "limits": "No NVDA/VoiceOver execution. Windows-specific browse-cursor and speech outcomes remain unverified."
       }
+    }
+  },
+  "stackMigration": {
+    "date": "2026-10-27",
+    "parentPR": 19005,
+    "parentBranch": "codex/a11y-workflow-remediation",
+    "parentCommit": "4a185a41f2cbeb74fb8e8acf3c1bb61314a2309a",
+    "basePR": 18845,
+    "preStackCommit": "05d4b88dc0",
+    "strategy": "Merge the parent to preserve shared branch history and ff-only pulls; keep parent audit layout, workflow tags and new save-announcement case.",
+    "auditCommand": "pnpm test:a11y:audit --workers=1",
+    "screenReaderCommand": "pnpm test:a11y:screen-reader --workers=1",
+    "limits": "Screen-reader cases are discovered, not executed on this laptop. The 50-ticket registry records original-scenario limits and pending manual verification. The temporary Sonner root patch still needs a distributable solution before the final PR.",
+    "validation": {
+      "node": "24.22.1",
+      "browser": "Chromium",
+      "passed": 22,
+      "duration": "1.3 minutes",
+      "scope": "Only affected audit regressions; no full browser suite or Guidepup execution.",
+      "command": "PORT=3001 MONGODB_URL=<isolated test database> pnpm test:a11y:audit --grep <affected browser cases> --workers=1",
+      "screenReaderDiscovery": 22,
+      "auditDiscovery": 390,
+      "ticketReferences": "All 50 tickets resolve to existing ticket-tagged tests in the renamed audit/reader suites.",
+      "lockfile": "Frozen lockfile validation passed; Guidepup upgrade and both Sonner consumers retain the patch.",
+      "preCommitLimitation": "The merge pre-commit hook failed on inherited test/access-control/int.spec.ts:58 (typescript/require-await). That file is identical to parent PR #19005. Targeted lint on the three affected a11y source files passed with warnings. The hook was skipped for the merge commit; unrelated access-control code was not changed."
     }
   }
 }

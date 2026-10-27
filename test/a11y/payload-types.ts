@@ -199,9 +199,11 @@ export interface Config {
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'es') | ('en' | 'es')[];
   globals: {
     menu: Menu;
+    'workflow-menu': WorkflowMenu;
   };
   globalsSelect: {
     menu: MenuSelect<false> | MenuSelect<true>;
+    'workflow-menu': WorkflowMenuSelect<false> | WorkflowMenuSelect<true>;
   };
   locale: 'en' | 'es';
   widgets: {
@@ -318,11 +320,34 @@ export interface Post {
    * A subtitle field to test focus indicators in the admin UI, helps us detect exiting out of rich text editor properly.
    */
   subtitle?: string | null;
+  showConditionalNote?: boolean | null;
+  conditionalNote?: string | null;
   accessibilitySelect: 'one' | 'two';
   accessibilitySortableSelect?: ('one' | 'two')[] | null;
   accessibilityDisabledSelect?: ('one' | 'two') | null;
   requiredTags: string[];
+  relatedPosts?: (string | Post)[] | null;
   relatedPost?: (string | null) | Post;
+  contrastRelationships?: (string | Post)[] | null;
+  contrastDisabledSelect?: ('one' | 'two')[] | null;
+  contrastDate?: string | null;
+  contrastDate_tz?: SupportedTimezones;
+  /**
+   * Group description for contrast measurement.
+   */
+  contrastGroup?: {
+    text?: string | null;
+  };
+  contrastFirst?: string | null;
+  contrastSecond?: string | null;
+  /**
+   * Choose a media file for this post.
+   */
+  contrastUpload?: (string | null) | Media;
+  contrastSEO?: {
+    title?: string | null;
+    description?: string | null;
+  };
   status?: ('draft' | 'published') | null;
   publishedOn?: string | null;
   content?: LexicalRichText<LexicalNodes_2AE36179> | null;
@@ -361,6 +386,16 @@ export interface Post {
     | boolean
     | null;
   source?: string | null;
+  readOnlySettings?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  readOnlySource?: string | null;
   unlabelledSettings?:
     | {
         [k: string]: unknown;
@@ -371,6 +406,10 @@ export interface Post {
     | boolean
     | null;
   unlabelledSource?: string | null;
+  tabDetails?: {
+    note?: string | null;
+  };
+  tabSummary?: string | null;
   createdBy?: {
     relationTo: 'users';
     value: string | User;
@@ -383,28 +422,6 @@ export interface Post {
   createdAt: string;
   deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TextBlock".
- */
-export interface TextBlock {
-  body?: LexicalRichText<LexicalNodes_9A5B20AD> | null;
-  text?: string | null;
-  date?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'textBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ImageBlock".
- */
-export interface ImageBlock {
-  alt?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'imageBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -474,6 +491,28 @@ export interface Media {
       _objectKey?: string | null;
     };
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextBlock".
+ */
+export interface TextBlock {
+  body?: LexicalRichText<LexicalNodes_9A5B20AD> | null;
+  text?: string | null;
+  date?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'textBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBlock".
+ */
+export interface ImageBlock {
+  alt?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -669,11 +708,32 @@ export interface PayloadFoldersSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
+  showConditionalNote?: T;
+  conditionalNote?: T;
   accessibilitySelect?: T;
   accessibilitySortableSelect?: T;
   accessibilityDisabledSelect?: T;
   requiredTags?: T;
+  relatedPosts?: T;
   relatedPost?: T;
+  contrastRelationships?: T;
+  contrastDisabledSelect?: T;
+  contrastDate?: T;
+  contrastDate_tz?: T;
+  contrastGroup?:
+    | T
+    | {
+        text?: T;
+      };
+  contrastFirst?: T;
+  contrastSecond?: T;
+  contrastUpload?: T;
+  contrastSEO?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
   status?: T;
   publishedOn?: T;
   content?: T;
@@ -719,8 +779,16 @@ export interface PostsSelect<T extends boolean = true> {
   location?: T;
   settings?: T;
   source?: T;
+  readOnlySettings?: T;
+  readOnlySource?: T;
   unlabelledSettings?: T;
   unlabelledSource?: T;
+  tabDetails?:
+    | T
+    | {
+        note?: T;
+      };
+  tabSummary?: T;
   createdBy?: T;
   updatedBy?: T;
   updatedAt?: T;
@@ -894,6 +962,28 @@ export interface PayloadLlmInstructionsSelect<T extends boolean = true> {
 export interface Menu {
   id: string;
   globalText?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  createdBy?: {
+    relationTo: 'users';
+    value: string | User;
+  } | null;
+  updatedBy?: {
+    relationTo: 'users';
+    value: string | User;
+  } | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "workflow-menu".
+ */
+export interface WorkflowMenu {
+  id: string;
+  globalText?: string | null;
   createdBy?: {
     relationTo: 'users';
     value: string | User;
@@ -910,6 +1000,24 @@ export interface Menu {
  * via the `definition` "menu_select".
  */
 export interface MenuSelect<T extends boolean = true> {
+  globalText?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "workflow-menu_select".
+ */
+export interface WorkflowMenuSelect<T extends boolean = true> {
   globalText?: T;
   createdBy?: T;
   updatedBy?: T;
@@ -1196,6 +1304,6 @@ export interface SerializedTableCellNode<TChildren> extends SerializedLexicalEle
 
 
 declare module 'payload' {
-  // @ts-ignore 
+  // @ts-ignore
   export interface GeneratedTypes extends Config {}
 }
