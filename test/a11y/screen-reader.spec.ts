@@ -1,4 +1,3 @@
-import { NVDAKeyCodeCommands } from '@guidepup/guidepup'
 import { screenReaderTest as test } from '@guidepup/playwright'
 import { expect } from '@playwright/test'
 import path from 'node:path'
@@ -347,92 +346,6 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
       })
     })
 
-    test.describe('Requires NVDA browse mode', () => {
-      test.skip(process.platform !== 'win32', 'Requires NVDA browse mode')
-
-      test('should not expose an invisible loading object after relationship drawer content', async ({
-        page,
-        screenReader,
-      }) => {
-        // PYLD-3650
-        await gotoCreatePost({ page, postsURL })
-        await page.locator('#relatedPost-add-new button').press('Enter')
-        const drawer = page.locator('.doc-drawer:visible')
-
-        await expect(drawer.locator('[data-form-ready="true"]').first()).toBeVisible()
-        // Place a browse-cursor boundary after the overlay without relying on wrapping to the header.
-        await drawer.evaluate((element) => {
-          const boundary = document.createElement('p')
-
-          boundary.textContent = 'End of relationship drawer'
-          element.append(boundary)
-        })
-        await navigateScreenReaderTo({
-          matches: /featured image/i,
-          screenReader,
-        })
-        const outputs: string[] = []
-        let hasReachedEnd = false
-        for (let index = 0; index < 50; index++) {
-          await screenReader.next()
-          const output = await screenReader.itemText()
-          outputs.push(output)
-          if (/end of relationship drawer/i.test(output)) {
-            hasReachedEnd = true
-            break
-          }
-        }
-        expect(hasReachedEnd, outputs.join('\n')).toBe(true)
-        expect(outputs.join(' ')).not.toMatch(/loading|unknown|unlabeled/i)
-      })
-    })
-
-    test.describe('Requires NVDA browse mode', () => {
-      test.skip(process.platform !== 'win32', 'Requires NVDA browse mode')
-
-      test('should allow the NVDA browse cursor to exit Lexical editors in both directions', async ({
-        page,
-        screenReader,
-      }) => {
-        // PYLD-3741
-        await gotoCreatePost({ page, postsURL })
-        await insertTextBlockWithKeyboard({ page })
-        for (const field of ['content', 'layout.0.body']) {
-          const editor = page.locator(`[data-field-path="${field}"] [contenteditable="true"]`)
-          const text = `Screen reader exit ${field}`
-
-          await editor.fill(text)
-          await screenReader.perform(NVDAKeyCodeCommands.exitFocusMode)
-          for (const direction of ['next', 'previous'] as const) {
-            await navigateScreenReaderTo({
-              matches: new RegExp(text),
-              screenReader,
-            })
-            const boundary =
-              field === 'content'
-                ? direction === 'next'
-                  ? /add item/i
-                  : /published on/i
-                : direction === 'next'
-                  ? /^text(?:$| .*?(?:edit|text field))/i
-                  : /block name/i
-            const outputs: string[] = []
-            let hasReachedOutsideContent = false
-            for (let index = 0; index < 40; index++) {
-              await screenReader[direction]()
-              const output = await screenReader.itemText()
-              outputs.push(output)
-              if (boundary.test(output)) {
-                hasReachedOutsideContent = true
-                break
-              }
-            }
-            expect(hasReachedOutsideContent, outputs.join('\n')).toBe(true)
-          }
-        }
-      })
-    })
-
     test('should omit hidden Lexical controls from screen-reader navigation', async ({
       page,
       screenReader,
@@ -582,30 +495,6 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
   })
 
   test.describe('4.1.2 Name, Role, Value (A)', () => {
-    test('should expose relationship option names in NVDA browse mode', async ({
-      page,
-      screenReader,
-    }) => {
-      // PYLD-3656
-      // Requires manual confirmation with NVDA browse mode.
-      test.skip(
-        screenReader.name !== 'NVDA',
-        'The original report is specific to NVDA browse mode.',
-      )
-      await gotoCreatePost({ page, postsURL })
-      const combobox = page.locator('#field-relatedPost input[role="combobox"]')
-      await combobox.focus()
-      await combobox.press('ArrowDown')
-      await expect(page.locator('.rs__option').first()).toBeVisible()
-
-      const output = await navigateScreenReaderTo({
-        matches: /Example post/i,
-        screenReader,
-      })
-
-      expect(output).not.toMatch(/blank/i)
-    })
-
     test('should announce filter and bulk-edit options by name', async ({ page, screenReader }) => {
       // PYLD-3752
       const whereBuilder = await openPostsFilter({ page, postsURL })

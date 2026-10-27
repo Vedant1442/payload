@@ -2718,7 +2718,7 @@ test.describe('WCAG 2.2 Level AA', () => {
     })
 
     test('should exit Lexical editors with Escape then Tab or Shift+Tab', async () => {
-      // PYLD-3775
+      // PYLD-3775, PYLD-3741: disclosed keyboard exit; NVDA browse-arrow exit remains a manual check.
       await gotoCreatePost({ page, postsURL })
       await insertTextBlockWithKeyboard({ page })
       for (const field of ['content', 'layout.0.body']) {
@@ -3239,9 +3239,14 @@ test.describe('WCAG 2.2 Level AA', () => {
     })
 
     test('should omit a finished relationship loading indicator from the accessibility tree', async () => {
+      // PYLD-3650: opacity alone must not leave the completed loading overlay exposed.
       const drawer = await openRelationshipCreationDrawer({ page, postsURL })
+      const overlay = drawer.locator('.loading-overlay--drawer')
 
       await expect(drawer.locator('[data-form-ready="true"]').first()).toBeVisible()
+      await expect(overlay).toHaveCount(1)
+      await expect(overlay).toHaveAttribute('aria-hidden', 'true')
+      expect(await overlay.ariaSnapshot()).toBe('')
       expect(await drawer.ariaSnapshot()).not.toMatch(/Loading/i)
     })
 
@@ -5781,7 +5786,7 @@ test.describe('WCAG 2.2 Level AA', () => {
     ]) {
       for (const [index, control] of ['field', 'operator'].entries()) {
         test(`should expose named ${control} filter options in the rich-text ${label} drawer`, async () => {
-          // PYLD-3662: option semantics; NVDA browse-mode output requires manual verification.
+          // PYLD-3662, PYLD-3656: option semantics; NVDA browse-mode output requires manual verification.
           const drawer = await open({ page, postsURL })
           const comboboxes = await openDrawerFilters({
             collectionLabel: label === 'relationship' ? 'Post' : undefined,
@@ -5796,6 +5801,32 @@ test.describe('WCAG 2.2 Level AA', () => {
         })
       }
     }
+
+    test('should expose named options in the relationship field', async () => {
+      // PYLD-3656: cover the direct relationship combobox as well as the flyout filters.
+      await gotoCreatePost({ page, postsURL })
+      const combobox = page.locator('#field-relatedPost').getByRole('combobox')
+
+      await combobox.focus()
+      await combobox.press('ArrowDown')
+      await expect(combobox).toHaveAttribute('aria-expanded', 'true')
+      await expect(combobox).toHaveAttribute('aria-controls', /\S/)
+      const listboxID = await combobox.getAttribute('aria-controls')
+      const listbox = page.locator(`[id="${listboxID}"]`)
+      const options = listbox.getByRole('option')
+
+      await expect(listbox).toHaveRole('listbox')
+      await expect(options.first()).toBeVisible()
+      await expectOptionsToHaveAccessibleNames(options, { areUnique: true })
+      for (const option of await options.all()) {
+        const label = (await option.innerText()).trim()
+
+        await expect(option).toHaveAccessibleName(label)
+      }
+      await expect(
+        listbox.getByRole('option', { name: 'Example post two', exact: true }),
+      ).toBeVisible()
+    })
 
     test('should name the image crop and focal-point controls by their purpose', async () => {
       // PYLD-3577, PYLD-3601

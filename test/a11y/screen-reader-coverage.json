@@ -14,7 +14,7 @@
     "screenReaderRun": "Not run on this laptop; do not infer AT success from browser assertions.",
     "screenReaderDiscovery": {
       "before": 54,
-      "after": 24
+      "after": 21
     },
     "followUpBrowserRun": {
       "status": "passed",
@@ -49,7 +49,7 @@
     "PYLD-3671 and PYLD-3678: current assertions permit a native label stop, unlike the original single-stop requirement. Native WebKit baseline also repeats labels. These remain partial coverage.",
     "PYLD-3580: DOM keyboard-focus persistence is fixed by a temporary branch-local Sonner patch and four browser checks pass. Virtual-cursor-only persistence remains unverified; replace the root patch with a published-package solution before the final PR.",
     "Reported NVDA/Chrome failures require that platform's evidence; this branch's default Windows Guidepup project uses Firefox.",
-    "NVDA browse-mode tests and screen-reader cursor containment must retain AT evidence.",
+    "Retired NVDA-specific cases have browser regressions, but original NVDA browse-mode and cursor outcomes remain manually unverified.",
     "Guidepup queue hazards removed from retained direction/version/widget captures; remote AT verification is still required.",
     "Further review found partial original-scenario coverage for PYLD-3699/PYLD-3730 (selected-locale cursor grouping) and PYLD-3642 (widget frame versus drag handle).",
     "PYLD-3581: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket.",
@@ -59,7 +59,8 @@
     "PYLD-3730: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket.",
     "PYLD-3697: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket.",
     "PYLD-3701: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket.",
-    "PYLD-3642 and PYLD-3662: NVDA-only automation retired; browser regressions retained. Reported Windows/NVDA behavior remains manually unverified, and the widget-frame versus drag-handle scenario gap remains open."
+    "PYLD-3642 and PYLD-3662: NVDA-only automation retired; browser regressions retained. Reported Windows/NVDA behavior remains manually unverified, and the widget-frame versus drag-handle scenario gap remains open.",
+    "PYLD-3650, PYLD-3741 and PYLD-3656: NVDA-only cases retired with runnable browser replacements. Their exact reported-platform cursor/speech behavior remains manually unverified; PYLD-3741 browser coverage proves Escape-then-Tab exit, not arrow-key browse exit."
   ],
   "tickets": [
     {
@@ -340,12 +341,12 @@
       "report": "Payload: Relationships: Add New Panel: Unknown loading object receives focus",
       "expected": "Only relevant content receives focus",
       "reportedScreenReaders": ["NVDA"],
-      "coverage": "screen-reader-regression-retained",
+      "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "screen-reader.spec.ts :: should not expose an invisible loading object after relationship drawer content"
+        "WCAG.e2e.spec.ts :: should omit a finished relationship loading indicator from the accessibility tree"
       ],
-      "limits": "NVDA-only invisible/unknown browse-cursor object; browser Loading omission isn't sufficient.",
-      "manualVerification": "Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence."
+      "limits": "Actual NVDA last-field-to-next-object navigation remains unverified; browser exclusion is not native screen-reader cursor evidence.",
+      "manualVerification": "Outstanding Windows/NVDA reported-platform verification. Actual NVDA last-field-to-next-object navigation remains unverified; browser exclusion is not native screen-reader cursor evidence."
     },
     {
       "ticket": "PYLD-3656",
@@ -353,12 +354,13 @@
       "report": "Payload: Relationships: Menu items do not expose their names in browse mode",
       "expected": "List items are announced when navigated through",
       "reportedScreenReaders": ["NVDA"],
-      "coverage": "screen-reader-regression-retained",
+      "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "screen-reader.spec.ts :: should expose relationship option names in NVDA browse mode"
+        "WCAG.e2e.spec.ts :: should expose named options in the relationship field",
+        "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
       ],
-      "limits": "NVDA browse mode is established by the installed adapter, but that adapter also clicks the body and resets to page top after the option list opens. The test must verify that the list remains open and that matching option text belongs to that list.",
-      "manualVerification": "Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence."
+      "limits": "Option names and accessibility-tree presence are tested; exact NVDA browse-mode speech remains unverified.",
+      "manualVerification": "Outstanding Windows/NVDA reported-platform verification. Option names and accessibility-tree presence are tested; exact NVDA browse-mode speech remains unverified."
     },
     {
       "ticket": "PYLD-3660",
@@ -626,12 +628,12 @@
       "report": "Payload: Many Locations - Not able to navigate up or down from field with screen reader or keyboard only",
       "expected": "Focus can be moved up or down the page content after the Body field is focused.",
       "reportedScreenReaders": ["NVDA"],
-      "coverage": "screen-reader-regression-retained",
+      "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "screen-reader.spec.ts :: should allow the NVDA browse cursor to exit Lexical editors in both directions"
+        "WCAG.e2e.spec.ts :: should exit Lexical editors with Escape then Tab or Shift+Tab"
       ],
-      "limits": "NVDA browse exit from two editors distinct from DOM tabbing.",
-      "manualVerification": "Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence."
+      "limits": "The disclosed keyboard exit path is tested; NVDA browse-arrow escape and literal ArrowUp/ArrowDown exit are not established by this browser test.",
+      "manualVerification": "Outstanding Windows/NVDA reported-platform verification. The disclosed keyboard exit path is tested; NVDA browse-arrow escape and literal ArrowUp/ArrowDown exit are not established by this browser test."
     },
     {
       "ticket": "PYLD-3743",
@@ -742,19 +744,19 @@
   ],
   "remainingScreenReaderReview": {
     "date": "2026-10-21",
-    "scope": "Static review initially covered 37 expanded cases at commit 203e115335. Thirteen were subsequently retired with explicit browser replacements and recorded manual limits; cases tracks the 24 remaining cases and retiredCases preserves all thirteen decisions.",
+    "scope": "Static review initially covered 37 expanded cases at commit 203e115335. Sixteen were subsequently retired with explicit browser replacements and recorded manual limits; cases tracks the 21 remaining cases and retiredCases preserves all sixteen decisions.",
     "interpretation": "Retain means the observable outcome justifies AT evidence, not that the test has passed or proves conformance. Strengthen means current assertions have a concrete false-pass, false-failure, scope, or cursor-start risk.",
     "counts": {
-      "retain-at": 11,
+      "retain-at": 10,
       "scenario-gap": 2,
-      "strengthen-at": 11
+      "strengthen-at": 9
     },
     "platformInventory": {
-      "total": 24,
-      "nvdaOnly": 3,
+      "total": 21,
+      "nvdaOnly": 0,
       "voiceOverOnly": 1,
       "both": 20,
-      "note": "On macOS the three NVDA-only cases are skipped; they are not passes. The 21 Mac-eligible cases are unchanged by retiring these two Windows-only cases."
+      "note": "All 21 remaining Guidepup cases are Mac-eligible. Twenty can also run on Windows; the widget-control cursor case is VoiceOver-only. Retiring Windows-only cases does not establish their NVDA outcomes."
     },
     "sharedRisks": [
       {
@@ -880,26 +882,6 @@
         "next": "Anchor traversal before the target controls, bound it to the added widget, and verify each visited item before activation."
       },
       {
-        "test": "should not expose an invisible loading object after relationship drawer content",
-        "title": "should not expose an invisible loading object after relationship drawer content",
-        "scenario": null,
-        "screenReaders": "NVDA",
-        "tickets": ["PYLD-3650"],
-        "decision": "strengthen-at",
-        "finding": "The synthetic end marker is appended inside the drawer. An unknown object immediately after the drawer could be excluded by that boundary. A blacklist of loading/unknown/unlabeled strings also misses an empty stop.",
-        "next": "Confirm the reported last-field-to-next-item transition in NVDA and place the scan boundary after the relevant possible loading object, without repairing the accessibility tree under test."
-      },
-      {
-        "test": "should allow the NVDA browse cursor to exit Lexical editors in both directions",
-        "title": "should allow the NVDA browse cursor to exit Lexical editors in both directions",
-        "scenario": null,
-        "screenReaders": "NVDA",
-        "tickets": ["PYLD-3741"],
-        "decision": "retain-at",
-        "finding": "The report concerns NVDA browse-mode escape from both editors. The test explicitly exits focus mode, navigates both directions, and checks outside boundaries; ordinary Tab tests do not prove this.",
-        "next": "Keep the reported-platform check; verify boundary matches identify outside content, and diagnose cursor state before extending step limits."
-      },
-      {
         "test": "should omit hidden Lexical controls from screen-reader navigation",
         "title": "should omit hidden Lexical controls from screen-reader navigation",
         "scenario": null,
@@ -958,16 +940,6 @@
         "decision": "strengthen-at",
         "finding": "The reported disabled control is an AT-discoverability issue, but the helper can match the prior spoken phrase as well as current item text. The actual successful run did reach Sort; the assertion can be more precise.",
         "next": "Require the current cursor item to identify Sort and its role/state. Keep the existing Close-button anchor and small step budget."
-      },
-      {
-        "test": "should expose relationship option names in NVDA browse mode",
-        "title": "should expose relationship option names in NVDA browse mode",
-        "scenario": null,
-        "screenReaders": "NVDA",
-        "tickets": ["PYLD-3656"],
-        "decision": "strengthen-at",
-        "finding": "navigateToWebContent in the installed NVDA adapter clicks the body and resets to page top. Calling it after opening the list can dismiss/change the menu, and Example post can match content outside the intended option list.",
-        "next": "Establish browse mode without losing the open list; assert it stays open and verify the reported option names within that context."
       },
       {
         "test": "should announce filter and bulk-edit options by name",
@@ -1216,6 +1188,52 @@
           "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
         ],
         "manualLimit": "NVDA/Windows verification remains outstanding; this laptop cannot run NVDA. Existing browser checks do not prove NVDA speech, browse navigation or interception of keys."
+      },
+      {
+        "test": "should not expose an invisible loading object after relationship drawer content",
+        "title": "should not expose an invisible loading object after relationship drawer content",
+        "scenario": null,
+        "screenReaders": "NVDA",
+        "tickets": ["PYLD-3650"],
+        "decision": "browser-plus-manual",
+        "finding": "PR #18381 / d2b5206968: LoadingOverlay adds aria-hidden={!show}. Real relationship creation drawer is ready; completed overlay still exists but has aria-hidden=true and an empty accessibility snapshot, with no Loading text in the drawer snapshot.",
+        "next": "Retain browser regressions and obtain reported-platform manual evidence if claiming the original NVDA outcome is verified.",
+        "retiredDate": "2026-10-27",
+        "replacementTests": [
+          "WCAG.e2e.spec.ts :: should omit a finished relationship loading indicator from the accessibility tree"
+        ],
+        "manualLimit": "Actual NVDA last-field-to-next-object navigation remains unverified; browser exclusion is not native screen-reader cursor evidence."
+      },
+      {
+        "test": "should allow the NVDA browse cursor to exit Lexical editors in both directions",
+        "title": "should allow the NVDA browse cursor to exit Lexical editors in both directions",
+        "scenario": null,
+        "screenReaders": "NVDA",
+        "tickets": ["PYLD-3741"],
+        "decision": "browser-plus-manual",
+        "finding": "PR #18381 / d2b5206968: IndentPlugin provides Escape-then-Tab/Shift+Tab exit and LexicalEditor exposes associated instructions. Existing real top-level and Blocks editor test verifies instructions and repeated Escape-then-Tab/Shift+Tab exit from the editor container. It also confirms normal Tab remains available for indentation.",
+        "next": "Retain browser regressions and obtain reported-platform manual evidence if claiming the original NVDA outcome is verified.",
+        "retiredDate": "2026-10-27",
+        "replacementTests": [
+          "WCAG.e2e.spec.ts :: should exit Lexical editors with Escape then Tab or Shift+Tab"
+        ],
+        "manualLimit": "The disclosed keyboard exit path is tested; NVDA browse-arrow escape and literal ArrowUp/ArrowDown exit are not established by this browser test."
+      },
+      {
+        "test": "should expose relationship option names in NVDA browse mode",
+        "title": "should expose relationship option names in NVDA browse mode",
+        "scenario": null,
+        "screenReaders": "NVDA",
+        "tickets": ["PYLD-3656"],
+        "decision": "browser-plus-manual",
+        "finding": "PR #18293 / 56fd301037: ReactSelect Option supplies a plain-text accessible name through aria-label. Direct relationship listbox options have nonempty accessible names matching visible labels; existing field/operator filter cases cover upload and relationship flyouts.",
+        "next": "Retain browser regressions and obtain reported-platform manual evidence if claiming the original NVDA outcome is verified.",
+        "retiredDate": "2026-10-27",
+        "replacementTests": [
+          "WCAG.e2e.spec.ts :: should expose named options in the relationship field",
+          "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
+        ],
+        "manualLimit": "Option names and accessibility-tree presence are tested; exact NVDA browse-mode speech remains unverified."
       }
     ],
     "retirementShortlist": {
@@ -1391,6 +1409,45 @@
       "change": "Opt out of the repeated web-content reset for this VoiceOver scenario and anchor the search at the actual drawer header Close button; allow dialog interaction. NVDA retains its reset. Shared helper defaults and checkbox assertions remain unchanged.",
       "verification": "Formatting, lint and discovery only on this laptop. Requires one focused remote VoiceOver run. This is a test-navigation hypothesis, not a confirmed fix or product conformance claim.",
       "limit": "Original single-stop requirement remains partial; the existing native-label-stop allowance is unchanged."
+    },
+    "remainingNVDAReplacements": {
+      "date": "2026-10-27",
+      "sources": "Original Linear reports read directly; local original fix commits inspected. No product code changed.",
+      "tickets": {
+        "PYLD-3650": {
+          "sourceFix": "PR #18381 / d2b5206968: LoadingOverlay adds aria-hidden={!show}.",
+          "reportedScenario": "Windows 11/Chrome 151/NVDA: move past the last featured-image object in relationship Add New; invisible loading object receives reader focus.",
+          "browserEvidence": "Real relationship creation drawer is ready; completed overlay still exists but has aria-hidden=true and an empty accessibility snapshot, with no Loading text in the drawer snapshot.",
+          "manualLimit": "Actual NVDA last-field-to-next-object navigation remains unverified; browser exclusion is not native screen-reader cursor evidence."
+        },
+        "PYLD-3741": {
+          "sourceFix": "PR #18381 / d2b5206968: IndentPlugin provides Escape-then-Tab/Shift+Tab exit and LexicalEditor exposes associated instructions.",
+          "reportedScenario": "Windows 11/Chrome 151/NVDA and keyboard only: cannot navigate up/down out of Blocks Body or Pages Content.",
+          "browserEvidence": "Existing real top-level and Blocks editor test verifies instructions and repeated Escape-then-Tab/Shift+Tab exit from the editor container. It also confirms normal Tab remains available for indentation.",
+          "manualLimit": "The disclosed keyboard exit path is tested; NVDA browse-arrow escape and literal ArrowUp/ArrowDown exit are not established by this browser test."
+        },
+        "PYLD-3656": {
+          "sourceFix": "PR #18293 / 56fd301037: ReactSelect Option supplies a plain-text accessible name through aria-label.",
+          "reportedScenario": "Windows 11/Chrome 151/NVDA: options are announced as blank in browse mode. Description mentions flyout filters; steps mention relationship fields, so browser regressions cover both.",
+          "browserEvidence": "Direct relationship listbox options have nonempty accessible names matching visible labels; existing field/operator filter cases cover upload and relationship flyouts.",
+          "manualLimit": "Option names and accessibility-tree presence are tested; exact NVDA browse-mode speech remains unverified."
+        }
+      },
+      "criteriaAssessed": [
+        "2.1.1 Keyboard (A)",
+        "2.1.2 No Keyboard Trap (A)",
+        "2.4.3 Focus Order (A)",
+        "4.1.2 Name, Role, Value (A)"
+      ],
+      "verification": {
+        "browser": "Chromium",
+        "passed": 7,
+        "duration": "20.9 seconds",
+        "scope": "Finished relationship loading-overlay exclusion, editor keyboard exit in both contexts/directions, direct relationship option names, upload/relationship field and operator filter option names.",
+        "command": "PORT=3001 MONGODB_URL=<isolated test database> pnpm test:e2e a11y --grep 'should omit a finished relationship loading indicator|should exit Lexical editors with Escape|should expose named options in the relationship field|should expose named .* filter options in the rich-text' --workers=1",
+        "screenReaderDiscovery": 21,
+        "limits": "No NVDA/VoiceOver execution. Windows-specific browse-cursor and speech outcomes remain unverified."
+      }
     }
   }
 }
