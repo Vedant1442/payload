@@ -95,11 +95,17 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
       await gotoFirstPost({ page, postsURL, serverURL })
       await page.locator('.doc-controls__popup .popup__trigger-wrap button').click()
       await page.getByRole('menuitem', { name: /duplicate selected locales/i }).click()
-      await expect(page.locator('.select-locales-drawer')).toBeVisible()
+      const drawer = page.locator('.select-locales-drawer')
+
+      await expect(drawer).toBeVisible()
       await navigateScreenReaderTo({
         matches: /English.*check\s?box|check\s?box.*English/i,
         maxSteps: 12,
         screenReader,
+        shouldEnterDialogs: true,
+        // VoiceOver already entered web content in beforeEach; keep this search inside the drawer.
+        shouldResetCursor: screenReader.name !== 'VoiceOver',
+        startAt: drawer.getByRole('button', { name: 'Close', exact: true }),
       })
 
       expect(await screenReader.itemText()).toMatch(/English.*check\s?box|check\s?box.*English/i)

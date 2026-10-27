@@ -464,17 +464,21 @@ export async function navigateScreenReaderTo({
   maxSteps = 150,
   screenReader,
   shouldEnterDialogs = false,
+  shouldResetCursor = true,
   startAt,
 }: {
   matches: RegExp
   maxSteps?: number
   screenReader: ScreenReaderPlaywright
   shouldEnterDialogs?: boolean
+  shouldResetCursor?: boolean
   startAt?: Locator
 }) {
   await screenReader.clearItemTextLog()
   await screenReader.clearSpokenPhraseLog()
-  await screenReader.navigateToWebContent()
+  if (shouldResetCursor) {
+    await screenReader.navigateToWebContent()
+  }
 
   if (startAt) {
     await captureScreenReader({ action: () => startAt.focus(), screenReader })

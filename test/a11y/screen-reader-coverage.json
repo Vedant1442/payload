@@ -1,7 +1,7 @@
 {
   "scope": "The 50 unique Linear tickets audited in screen-reader.spec.ts before this consolidation.",
   "policy": "Every ticket must resolve to at least one relevant test. Partial mappings are not proof of the original remedy. Removing Guidepup coverage requires replacement browser evidence and explicit AT limitations.",
-  "updated": "2026-10-23",
+  "updated": "2026-10-27",
   "verification": {
     "browserRun": {
       "date": "2026-10-21",
@@ -1372,6 +1372,15 @@
         "reportedError": "One TypeError: Load failed associated with __nextjs_original-stack-frames/access-control checks. Claude attributed it to the dev overlay; the underlying error was not independently confirmed here. No observed failure in the four toast checks.",
         "limits": "Real DOM keyboard focus only; virtual-cursor behavior remains unverified."
       }
+    },
+    "PYLD-3671": {
+      "date": "2026-10-27",
+      "remoteCommit": "0e1e79d9dc",
+      "observedFailure": "One selected test failed in navigateScreenReaderTo at screen-reader.spec.ts:99 after the duplicate-locales drawer visibility assertion passed. Its second navigateToWebContent call could not find web content in the VoiceOver Item Chooser. The beforeEach reset succeeded.",
+      "artifactEvidence": "Claude reports browser frames before and after the approximately 92-second native navigation gap show the drawer still open. No per-step navigation logs were reached. Native chooser contents are not observable from the Playwright trace.",
+      "change": "Opt out of the repeated web-content reset for this VoiceOver scenario and anchor the search at the actual drawer header Close button; allow dialog interaction. NVDA retains its reset. Shared helper defaults and checkbox assertions remain unchanged.",
+      "verification": "Formatting, lint and discovery only on this laptop. Requires one focused remote VoiceOver run. This is a test-navigation hypothesis, not a confirmed fix or product conformance claim.",
+      "limit": "Original single-stop requirement remains partial; the existing native-label-stop allowance is unchanged."
     }
   }
 }
