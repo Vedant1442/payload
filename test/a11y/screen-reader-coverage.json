@@ -11,7 +11,152 @@
       "scope": "Only the browser cases replacing the audited candidates. No full suite or Guidepup execution.",
       "command": "PORT=3001 MONGODB_URL=<isolated test database> pnpm test:e2e a11y --grep 'default login logo|expose required state without naming|identify the .* row on its drag control|describe pickup movement drop|drop a keyboard-dragged|active sort direction on relationship table|selected folder as the current|visit every theme option|current locale and popup state|name version table per-page|live-preview zoom name, expansion|selected Add Blocks option by name|disabled Paste or Replace|Welcome and the signed-in account|navigate LLM instructions tabs|name LLM instructions editors' --workers=1"
     },
-    "screenReaderRun": "Not run on this laptop; do not infer AT success from browser assertions.",
+    "screenReaderRun": {
+      "date": "2026-10-27",
+      "commit": "eacc584715cec150d97f34db0d4c0ad9352ede4f",
+      "node": "24.22.1",
+      "screenReader": "VoiceOver",
+      "browser": "WebKit",
+      "source": "User-relayed Claude full-run report. Original remote log/trace files are not present on this laptop; classifications are scoped to reported evidence.",
+      "log": "/tmp/pyld-screen-reader-full-logs/full-run-20261027-125416.log",
+      "duration": "46.5 minutes",
+      "exitCode": 1,
+      "totals": {
+        "discovered": 22,
+        "run": 22,
+        "passed": 10,
+        "failed": 12,
+        "skipped": 0,
+        "notRun": 0
+      },
+      "results": [
+        {
+          "test": "should announce relative direction and position while dragging the Array row",
+          "status": "passed"
+        },
+        {
+          "test": "should announce relative direction and position while dragging the Blocks row",
+          "status": "passed"
+        },
+        {
+          "test": "should announce associated labels for the duplicate locale checkboxes",
+          "status": "passed"
+        },
+        {
+          "test": "should announce the associated label for the deletion checkbox",
+          "status": "failed",
+          "group": "B",
+          "phase": "web-content-entry",
+          "observation": "Item Chooser could not find web content after 10 attempts."
+        },
+        {
+          "test": "should announce table cell text once without conflicting sort commands",
+          "status": "failed",
+          "group": "A",
+          "phase": "navigation-timeout",
+          "observation": "Approximately 300 seconds; VoiceOver not running at itemText. Native crash versus teardown/timeout shutdown is not established."
+        },
+        {
+          "test": "should communicate removed version text while browsing the comparison",
+          "status": "failed",
+          "group": "A",
+          "phase": "navigation-timeout",
+          "observation": "Approximately 300 seconds; VoiceOver not running at itemText. Native crash versus teardown/timeout shutdown is not established."
+        },
+        {
+          "test": "should announce the deletion dialog before background page content",
+          "status": "failed",
+          "group": "C",
+          "phase": "assertion",
+          "observation": "Expected dialog speech; captured menu-item context."
+        },
+        {
+          "test": "should drop the Array row with the screen reader active",
+          "status": "passed"
+        },
+        {
+          "test": "should drop the Blocks row with the screen reader active",
+          "status": "passed"
+        },
+        {
+          "test": "should reach widget edit size and remove controls with the VoiceOver cursor",
+          "status": "failed",
+          "group": "A",
+          "phase": "navigation-timeout",
+          "observation": "Approximately 300 seconds; VoiceOver not running at itemText. Native crash versus teardown/timeout shutdown is not established."
+        },
+        {
+          "test": "should omit hidden Lexical controls from screen-reader navigation",
+          "status": "failed",
+          "group": "A",
+          "phase": "navigation-timeout",
+          "observation": "Approximately 300 seconds; VoiceOver not running at itemText. Native crash versus teardown/timeout shutdown is not established."
+        },
+        {
+          "test": "should move the screen-reader cursor into the add-widget drawer upon opening",
+          "status": "passed"
+        },
+        {
+          "test": "should move the screen-reader cursor into Copy to locale from the overflow menu",
+          "status": "failed",
+          "group": "C",
+          "phase": "assertion",
+          "observation": "Captured Copy to locale heading level 2; old regex omitted this valid drawer-local heading."
+        },
+        {
+          "test": "should expose one screen-reader stop for the Copy to locale select",
+          "status": "passed"
+        },
+        {
+          "test": "should expose disabled row-menu actions to screen-reader navigation",
+          "status": "failed",
+          "group": "B",
+          "phase": "web-content-entry",
+          "observation": "Item Chooser could not find web content after 10 attempts."
+        },
+        {
+          "test": "should keep the disabled Group by sort control in screen-reader navigation",
+          "status": "passed"
+        },
+        {
+          "test": "should announce filter and bulk-edit options by name",
+          "status": "failed",
+          "group": "C",
+          "phase": "assertion",
+          "observation": "Expected subtitle; captured generic combobox instructions. Exact speech timing and current option context remain unverified."
+        },
+        {
+          "test": "should announce the unsaved Copy to locale toast without its close button",
+          "status": "failed",
+          "group": "C",
+          "phase": "assertion",
+          "observation": "Expected unsaved toast speech; captured Copy to locale menu item. Cause not established."
+        },
+        {
+          "test": "should announce global API depth changes while focus stays on the stepper",
+          "status": "passed"
+        },
+        {
+          "test": "should announce table search result changes without moving focus",
+          "status": "failed",
+          "group": "D",
+          "phase": "unclassified-timeout",
+          "observation": "60-second test timeout; stage not established by the report."
+        },
+        {
+          "test": "should announce navigation folder search results without moving focus",
+          "status": "passed"
+        },
+        {
+          "test": "should announce a successful document save without moving the screen-reader cursor",
+          "status": "failed",
+          "group": "A",
+          "phase": "navigation-timeout",
+          "observation": "Approximately 300 seconds; VoiceOver not running at itemText. Native crash versus teardown/timeout shutdown is not established."
+        }
+      ],
+      "limits": "No reported evidence of foreground contamination. This does not establish its absence or prove a VoiceOver crash. Assertions and platform-specific coverage limits still apply."
+    },
     "screenReaderDiscovery": {
       "before": 54,
       "after": 22
@@ -1459,6 +1604,15 @@
         "screenReaderDiscovery": 21,
         "limits": "No NVDA/VoiceOver execution. Windows-specific browse-cursor and speech outcomes remain unverified."
       }
+    },
+    "postStackBaseline": {
+      "baselineCommit": "eacc584715cec150d97f34db0d4c0ad9352ede4f",
+      "changes": [
+        "Use existing duplicate-locale approach for the two Item Chooser failures: skip repeated VoiceOver web-content reset and anchor within the current dialog/menu. NVDA retains its reset.",
+        "Allow the named Copy-to heading as valid drawer entry; do not move focus after opening in this cursor-entry test. Old menu-item context still fails."
+      ],
+      "next": "One focused remote run of these three cases. Inspect final cursor logs for Group A and trace stage for Group D before changing other tests.",
+      "verification": "Lint and targeted discovery only on this laptop; changed Guidepup cases require remote execution."
     }
   },
   "stackMigration": {

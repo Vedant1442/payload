@@ -133,15 +133,20 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         await page.getByRole('menuitem', { name: 'Delete', exact: true }).click()
         const dialog = page.getByRole('dialog', { name: /confirm deletion/i })
 
+        const checkbox = dialog.getByRole('checkbox', {
+          name: 'Skip trash and delete permanently',
+          exact: true,
+        })
+
         await expect(dialog).toBeVisible()
-        await expect(
-          dialog.getByRole('checkbox', { name: 'Skip trash and delete permanently', exact: true }),
-        ).toBeVisible()
+        await expect(checkbox).toBeVisible()
         await navigateScreenReaderTo({
           matches: /delete permanently.*check\s?box|check\s?box.*delete permanently/i,
           maxSteps: 12,
           screenReader,
           shouldEnterDialogs: true,
+          shouldResetCursor: screenReader.name !== 'VoiceOver',
+          startAt: checkbox,
         })
 
         expect(await screenReader.itemText()).toMatch(
@@ -425,9 +430,14 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
           screenReader,
         })
 
-        await expect(page.locator('#copy-locale')).toBeVisible()
+        const drawer = page.locator('#copy-locale')
+
+        await expect(drawer).toBeVisible()
+        await expect(
+          drawer.getByRole('heading', { name: 'Copy to locale', exact: true }),
+        ).toBeVisible()
         expect(capture.itemText).toMatch(
-          /close|copy to locale.*dialog|dialog.*copy to locale|copy to.*(combo|pop)/i,
+          /close|copy to locale.*(?:dialog|heading)|dialog.*copy to locale|copy to.*(combo|pop)/i,
         )
         expect(capture.itemText).not.toMatch(/skip to content|dashboard|more options/i)
       },
@@ -475,10 +485,13 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
       { tag: ['@admin-navigation'] },
       async ({ page, screenReader }) => {
         // PYLD-3745
-        await openFirstBlockActions({ page, postsURL })
+        const menu = await openFirstBlockActions({ page, postsURL })
         const output = await navigateScreenReaderTo({
           matches: /paste|replace/i,
+          maxSteps: 12,
           screenReader,
+          shouldResetCursor: screenReader.name !== 'VoiceOver',
+          startAt: menu.getByRole('menuitem', { name: 'Duplicate', exact: true }),
         })
 
         expect(output).toMatch(/dimmed|disabled|unavailable/i)
