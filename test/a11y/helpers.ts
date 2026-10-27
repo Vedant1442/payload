@@ -529,6 +529,13 @@ export async function navigateScreenReaderTo({
 
   if (startAt) {
     await captureScreenReader({ action: () => startAt.focus(), screenReader })
+    await expect(startAt).toBeFocused()
+    if (screenReader.name === 'VoiceOver') {
+      const { voiceOverKeyCodeCommands } = await import('@guidepup/guidepup')
+
+      // DOM focus does not establish the VoiceOver cursor's starting position.
+      await screenReader.perform(voiceOverKeyCodeCommands.moveCursorToKeyboardFocus)
+    }
   }
 
   for (let index = 0; index < maxSteps; index++) {

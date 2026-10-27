@@ -1613,6 +1613,29 @@
       ],
       "next": "One focused remote run of these three cases. Inspect final cursor logs for Group A and trace stage for Group D before changing other tests.",
       "verification": "Lint and targeted discovery only on this laptop; changed Guidepup cases require remote execution."
+    },
+    "postStackTargetedRerun": {
+      "date": "2026-10-27",
+      "commit": "58c6b8107386e8fafaaa80d02e53255e5d921c18",
+      "source": "User-relayed Claude targeted report; original log and traces remain on the remote laptop.",
+      "log": "/tmp/pyld-screen-reader-full-logs/targeted-rerun-20261027-150157.log",
+      "totals": {
+        "run": 3,
+        "passed": 0,
+        "failed": 3
+      },
+      "observations": {
+        "deletionCheckbox": "2.5 minutes. Reader begins at scroll area, reads the checkbox label without checkbox semantics, then Cancel/Confirm and repeats Notifications alt+T region. No Item Chooser error.",
+        "copyDrawerEntry": "39.7 seconds. Captured current item is scroll area; no named drawer/heading context established. Remains unresolved; generic scroll area is not accepted as proof of arrival.",
+        "disabledRowActions": "2.6 minutes. Reader traverses block editor controls instead of reaching Paste/Replace. DOM anchor focus did not establish a verified menu-local VoiceOver start."
+      },
+      "interpretation": "Neither successful DOM focus nor an in-page output proves the virtual cursor is at the requested anchor. No VoiceOver-not-running or Item Chooser error was reported in this targeted run. The report did not supply the requested original Group A/D final logs.",
+      "change": "When a startAt locator is supplied, verify its DOM focus, then explicitly move the VoiceOver cursor to keyboard focus using the installed SDK command, outside any capture action. NVDA and unanchored calls are unchanged.",
+      "criteriaAssessed": [
+        "2.4.3 Focus Order (A): test navigation setup only; no product-conformance claim"
+      ],
+      "verification": "Lint and four-case discovery passed. Runtime import confirms the installed SDK exports moveCursorToKeyboardFocus as VO-Shift-F4. No AT execution on this laptop; remote verification remains pending.",
+      "next": "Run deletion-checkbox and disabled-row-menu cases once, plus the previously passing duplicate-locale and Group-by anchor regressions. Collect original Group A/D final cursor and pending-action evidence from saved artifacts without rerunning those failures."
     }
   },
   "stackMigration": {
