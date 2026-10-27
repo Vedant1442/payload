@@ -23,12 +23,9 @@ import {
   openCopyToLocaleDrawer,
   openDashboardEditor,
   openDragReorderField,
-  openDrawerFilters,
   openFirstBlockActions,
   openNavigationFolders,
   openPostsFilter,
-  openRichTextRelationshipDrawer,
-  openRichTextUploadDrawer,
   openVersionComparison,
   openWidgetDrawer,
   waitForKeyboardDragActivation,
@@ -292,30 +289,6 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         }
       })
     }
-
-    test.describe('Requires Windows and NVDA', () => {
-      test.skip(process.platform !== 'win32', 'Requires Windows and NVDA')
-
-      test('should lift a dashboard widget with Space while NVDA is active', async ({
-        page,
-        screenReader,
-      }) => {
-        // PYLD-3642
-        await openDashboardEditor({ page, serverURL })
-        const widget = await addCollectionQueryWidget({ page })
-
-        await widget.getByRole('button', { name: 'Drag to reorder', exact: true }).focus()
-        const output = await captureScreenReaderOutput({
-          action: () => page.keyboard.press('Space'),
-          screenReader,
-        })
-        await expect(page.locator('.drag-overlay')).toBeVisible()
-        await expect(page.locator('[id^="widget-editor-"]:visible')).toHaveCount(0)
-        expect(output).toMatch(/picked up|lifted|dragging/i)
-        await screenReader.press('Escape')
-        await expect(page.locator('.drag-overlay')).toHaveCount(0)
-      })
-    })
   })
 
   test.describe('2.4.3 Focus Order (A)', () => {
@@ -609,52 +582,6 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
   })
 
   test.describe('4.1.2 Name, Role, Value (A)', () => {
-    test('should announce rich-text upload and relationship filter options in NVDA browse mode', async ({
-      page,
-      screenReader,
-    }) => {
-      // PYLD-3662
-      test.skip(
-        screenReader.name !== 'NVDA',
-        'The report concerns NVDA browse mode; VoiceOver is not equivalent evidence.',
-      )
-      for (const open of [openRichTextUploadDrawer, openRichTextRelationshipDrawer]) {
-        for (const index of [0, 1]) {
-          // Reopen for each control: Escape currently dismisses the containing drawer too.
-          const drawer = await open({ page, postsURL })
-          const comboboxes = await openDrawerFilters({
-            collectionLabel: open === openRichTextRelationshipDrawer ? 'Post' : undefined,
-            drawer,
-          })
-          const combobox = comboboxes.nth(index)
-
-          await combobox.focus()
-          await combobox.press('ArrowDown')
-          const options = page.getByRole('option')
-
-          await expect(options.first()).toBeVisible()
-          const optionNames = await options.allTextContents()
-          const stops: string[] = []
-
-          // The focused editable combobox enters NVDA focus mode. Switch to browse mode
-          // without Escape, which would also dismiss the option list.
-          await screenReader.perform(NVDAKeyCodeCommands.toggleBetweenBrowseAndFocusMode)
-          await expect(options.first()).toBeVisible()
-          // NVDA's next command sends Down Arrow through its browse cursor.
-          for (let step = 0; step < optionNames.length + 8; step++) {
-            await screenReader.next()
-            stops.push(await screenReader.itemText())
-          }
-          for (const name of optionNames) {
-            expect(
-              stops.some((stop) => stop.toLowerCase().includes(name.trim().toLowerCase())),
-            ).toBe(true)
-          }
-          expect(stops.join('\n')).not.toMatch(/\bblank\b/i)
-        }
-      }
-    })
-
     test('should expose relationship option names in NVDA browse mode', async ({
       page,
       screenReader,

@@ -14,7 +14,7 @@
     "screenReaderRun": "Not run on this laptop; do not infer AT success from browser assertions.",
     "screenReaderDiscovery": {
       "before": 54,
-      "after": 26
+      "after": 24
     },
     "followUpBrowserRun": {
       "status": "passed",
@@ -58,7 +58,8 @@
     "PYLD-3699: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket.",
     "PYLD-3730: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket.",
     "PYLD-3697: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket.",
-    "PYLD-3701: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket."
+    "PYLD-3701: Guidepup retired in favor of browser regressions; original reported AT behavior still requires the manual verification recorded on the ticket.",
+    "PYLD-3642 and PYLD-3662: NVDA-only automation retired; browser regressions retained. Reported Windows/NVDA behavior remains manually unverified, and the widget-frame versus drag-handle scenario gap remains open."
   ],
   "tickets": [
     {
@@ -294,13 +295,12 @@
       "report": "Payload: Dashboard: Cannot place Widgets in rearrangement state while screen reader is active",
       "expected": "Pressing spacebar on a widget frame places it in its rearrangement state",
       "reportedScreenReaders": ["NVDA"],
-      "coverage": "partial",
+      "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
-        "WCAG.e2e.spec.ts :: should reorder widgets using the dedicated keyboard drag control",
-        "screen-reader.spec.ts :: should lift a dashboard widget with Space while NVDA is active"
+        "WCAG.e2e.spec.ts :: should reorder widgets using the dedicated keyboard drag control"
       ],
-      "limits": "The ticket starts with Space on the focused widget frame. The test directly focuses the separate drag handle. The revised keyboard workflow needs explicit verification; a handle-only pass is narrower evidence.",
-      "manualVerification": "Outstanding: reproduce the original cursor grouping or frame-keyboard scenario; the current narrower assertion is not proof of the full remedy."
+      "limits": "The ticket starts with Space on the focused widget frame. The test directly focuses the separate drag handle. The revised keyboard workflow needs explicit verification; a handle-only pass is narrower evidence. NVDA automation retired by user decision because existing browser regressions are runnable; original reported Windows/NVDA verification remains outstanding.",
+      "manualVerification": "Manual Windows/NVDA check pending. Outstanding: reproduce the original cursor grouping or frame-keyboard scenario; the current narrower assertion is not proof of the full remedy."
     },
     {
       "ticket": "PYLD-3644",
@@ -379,14 +379,13 @@
       "report": "Payload: Rich Text Field: Add panels: Filter lists do not expose their names in browse mode",
       "expected": "List items are announced when navigated through",
       "reportedScreenReaders": ["NVDA"],
-      "coverage": "screen-reader-regression-retained",
+      "coverage": "browser-regression-with-manual-at-pending",
       "tests": [
         "WCAG.e2e.spec.ts :: should keep drawer filter options inside the active modal accessibility tree",
-        "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer",
-        "screen-reader.spec.ts :: should announce rich-text upload and relationship filter options in NVDA browse mode"
+        "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
       ],
-      "limits": "NVDA browse-mode option naming; correct explicit mode-switch behavior.",
-      "manualVerification": "Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence."
+      "limits": "NVDA browse-mode option naming; correct explicit mode-switch behavior. NVDA automation retired by user decision because existing browser regressions are runnable; original reported Windows/NVDA verification remains outstanding.",
+      "manualVerification": "Manual Windows/NVDA check pending. Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence."
     },
     {
       "ticket": "PYLD-3669",
@@ -743,19 +742,19 @@
   ],
   "remainingScreenReaderReview": {
     "date": "2026-10-21",
-    "scope": "Static review initially covered 37 expanded cases at commit 203e115335. Eleven were subsequently retired with explicit browser replacements and recorded manual limits; cases tracks the 26 remaining cases and retiredCases preserves all eleven decisions.",
+    "scope": "Static review initially covered 37 expanded cases at commit 203e115335. Thirteen were subsequently retired with explicit browser replacements and recorded manual limits; cases tracks the 24 remaining cases and retiredCases preserves all thirteen decisions.",
     "interpretation": "Retain means the observable outcome justifies AT evidence, not that the test has passed or proves conformance. Strengthen means current assertions have a concrete false-pass, false-failure, scope, or cursor-start risk.",
     "counts": {
       "retain-at": 11,
-      "scenario-gap": 3,
-      "strengthen-at": 12
+      "scenario-gap": 2,
+      "strengthen-at": 11
     },
     "platformInventory": {
-      "total": 26,
-      "nvdaOnly": 5,
+      "total": 24,
+      "nvdaOnly": 3,
       "voiceOverOnly": 1,
       "both": 20,
-      "note": "On macOS the five NVDA-only cases are skipped; they are not passes."
+      "note": "On macOS the three NVDA-only cases are skipped; they are not passes. The 21 Mac-eligible cases are unchanged by retiring these two Windows-only cases."
     },
     "sharedRisks": [
       {
@@ -871,16 +870,6 @@
         "next": "Keep both Array and Blocks cases; confirm the intended AT mode and key handling before diagnosing a failure."
       },
       {
-        "test": "should lift a dashboard widget with Space while NVDA is active",
-        "title": "should lift a dashboard widget with Space while NVDA is active",
-        "scenario": null,
-        "screenReaders": "NVDA",
-        "tickets": ["PYLD-3642"],
-        "decision": "scenario-gap",
-        "finding": "PYLD-3642 starts with keyboard focus on the widget frame and Space incorrectly opening Edit. This test directly focuses the separate drag handle before Space.",
-        "next": "Test the keyboard path from the frame and document the revised frame/handle interaction contract; a handle-only pass does not prove the literal reported trigger."
-      },
-      {
         "test": "should reach widget edit size and remove controls with the VoiceOver cursor",
         "title": "should reach widget edit size and remove controls with the VoiceOver cursor",
         "scenario": null,
@@ -969,16 +958,6 @@
         "decision": "strengthen-at",
         "finding": "The reported disabled control is an AT-discoverability issue, but the helper can match the prior spoken phrase as well as current item text. The actual successful run did reach Sort; the assertion can be more precise.",
         "next": "Require the current cursor item to identify Sort and its role/state. Keep the existing Close-button anchor and small step budget."
-      },
-      {
-        "test": "should announce rich-text upload and relationship filter options in NVDA browse mode",
-        "title": "should announce rich-text upload and relationship filter options in NVDA browse mode",
-        "scenario": null,
-        "screenReaders": "NVDA",
-        "tickets": ["PYLD-3662"],
-        "decision": "strengthen-at",
-        "finding": "Explicit NVDA browse-mode switching and open-option checks are appropriate. The scan accepts option names anywhere in the next option-count-plus-eight stops, so coincidental background text can satisfy a name.",
-        "next": "Keep both rich-text drawer types and controls; verify bounded option-list traversal and option context for each required name."
       },
       {
         "test": "should expose relationship option names in NVDA browse mode",
@@ -1206,6 +1185,37 @@
         ],
         "manualLimit": "Not yet verified manually: Replace the five-flow sweep with representative popup-local AT arrival coverage and record localization cursor entry manually. Existing drawer-entry AT checks do not prove popup/localization behavior.",
         "retiredDate": "2026-10-23"
+      },
+      {
+        "test": "should lift a dashboard widget with Space while NVDA is active",
+        "title": "should lift a dashboard widget with Space while NVDA is active",
+        "scenario": null,
+        "screenReaders": "NVDA",
+        "tickets": ["PYLD-3642"],
+        "decision": "browser-plus-manual",
+        "finding": "PYLD-3642 starts with keyboard focus on the widget frame and Space incorrectly opening Edit. This test directly focuses the separate drag handle before Space.",
+        "next": "Outstanding: reproduce the original cursor grouping or frame-keyboard scenario; the current narrower assertion is not proof of the full remedy.",
+        "retiredDate": "2026-10-27",
+        "replacementTests": [
+          "WCAG.e2e.spec.ts :: should reorder widgets using the dedicated keyboard drag control"
+        ],
+        "manualLimit": "NVDA/Windows verification remains outstanding; this laptop cannot run NVDA. Existing browser checks do not prove NVDA speech, browse navigation or interception of keys."
+      },
+      {
+        "test": "should announce rich-text upload and relationship filter options in NVDA browse mode",
+        "title": "should announce rich-text upload and relationship filter options in NVDA browse mode",
+        "scenario": null,
+        "screenReaders": "NVDA",
+        "tickets": ["PYLD-3662"],
+        "decision": "browser-plus-manual",
+        "finding": "Explicit NVDA browse-mode switching and open-option checks are appropriate. The scan accepts option names anywhere in the next option-count-plus-eight stops, so coincidental background text can satisfy a name.",
+        "next": "Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence.",
+        "retiredDate": "2026-10-27",
+        "replacementTests": [
+          "WCAG.e2e.spec.ts :: should keep drawer filter options inside the active modal accessibility tree",
+          "WCAG.e2e.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
+        ],
+        "manualLimit": "NVDA/Windows verification remains outstanding; this laptop cannot run NVDA. Existing browser checks do not prove NVDA speech, browse navigation or interception of keys."
       }
     ],
     "retirementShortlist": {

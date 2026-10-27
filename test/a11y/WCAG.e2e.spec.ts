@@ -3093,7 +3093,7 @@ test.describe('WCAG 2.2 Level AA', () => {
     })
 
     test('should reorder widgets using the dedicated keyboard drag control', async () => {
-      // PYLD-3642: browser coverage complements the NVDA regression.
+      // PYLD-3642: keyboard regression; original widget-frame behavior with NVDA requires manual verification.
       await openDashboardEditor({ page, serverURL })
       const widgets = page.locator('.modular-dashboard .widget[data-slug]')
 
@@ -5781,7 +5781,7 @@ test.describe('WCAG 2.2 Level AA', () => {
     ]) {
       for (const [index, control] of ['field', 'operator'].entries()) {
         test(`should expose named ${control} filter options in the rich-text ${label} drawer`, async () => {
-          // Additional coverage for PYLD-3662; NVDA browse-mode output is checked in screen-reader.spec.ts.
+          // PYLD-3662: option semantics; NVDA browse-mode output requires manual verification.
           const drawer = await open({ page, postsURL })
           const comboboxes = await openDrawerFilters({
             collectionLabel: label === 'relationship' ? 'Post' : undefined,
