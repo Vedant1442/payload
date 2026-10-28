@@ -96,7 +96,9 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
           .getByRole('link', { name: title, exact: true })
 
         await expect(link).toBeVisible()
-        const row = page.getByRole('row').filter({ has: link })
+        const row = page.getByRole('row').filter({
+          has: page.getByRole('link', { name: title, exact: true }),
+        })
         const output = await navigateScreenReaderTo({
           matches: /^(?!.*select).*Example post two/i,
           maxSteps: 6,

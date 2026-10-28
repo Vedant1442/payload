@@ -525,6 +525,11 @@ export async function navigateScreenReaderTo({
   shouldSkipToContent?: boolean
   startAt?: Locator
 }) {
+  if (startAt) {
+    await expect(startAt).toHaveCount(1)
+    await expect(startAt).toBeVisible()
+  }
+
   await screenReader.clearItemTextLog()
   await screenReader.clearSpokenPhraseLog()
   if (shouldResetCursor) {

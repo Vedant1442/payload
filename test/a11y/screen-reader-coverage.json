@@ -1899,6 +1899,18 @@
         "4.1.3 Status Messages (AA): save speech remains unverified"
       ],
       "next": "Read native speech-log attachments in the archived save trace before another AT run. Do not weaken the save assertion or claim a product speech defect from the single capture."
+    },
+    "post47c5487c": {
+      "date": "2026-10-28",
+      "commit": "47c5487c717c595695192c4cf8bf22e85174d6a0",
+      "source": "User-relayed remote report; two selected cases.",
+      "widget": "Passed in 3.0 minutes. Edit, Resize and Delete reached; stable widget-ID disappearance assertion passed.",
+      "table": "10.0 minutes including teardown timeout. Target link visibility passed, but the row filter reused a grid-scoped inner locator, requiring a grid inside each row. The anchor never resolved. This is a test locator defect, not evidence that seeded Example post two is absent.",
+      "change": "Use a row-relative link locator inside the filter. Assert each startAt anchor is unique and visible before any native reset/capture. Extend existing browser grid regression to verify the exact target row checkbox exists, is visible and can receive focus.",
+      "limits": "Native table-cell speech still unverified after this correction. No change to the save test; manual save check pending. No full current-suite pass total.",
+      "criteriaAssessed": ["1.3.1 Info and Relationships (A)", "2.4.3 Focus Order (A)"],
+      "next": "Finish the already prepared manual save check. Afterwards verify only the corrected table-cell case; do not repeat the now-passing widget case without a relevant change.",
+      "browserVerification": "Exact row/checkbox lookup and keyboard focus verified in the existing Chromium grid regression: 1 passed in 7.2 seconds. Targeted lint passed. No local native execution."
     }
   },
   "stackMigration": {

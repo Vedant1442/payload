@@ -5038,11 +5038,19 @@ test.describe('WCAG 2.2 Level AA', () => {
         await gotoPostsList({ page, postsURL })
         const grid = page.getByRole('grid', { name: 'Posts', exact: true })
         const title = grid.getByRole('link', { name: 'Example post two', exact: true })
+        const row = page.getByRole('row').filter({
+          has: page.getByRole('link', { name: 'Example post two', exact: true }),
+        })
+        const checkbox = row.getByRole('checkbox')
         const defaults = encodeURIComponent(
           JSON.stringify(['title', 'accessibilitySelect', 'updatedAt']),
         )
 
         try {
+          await expect(checkbox).toHaveCount(1)
+          await expect(checkbox).toBeVisible()
+          await checkbox.focus()
+          await expect(checkbox).toBeFocused()
           await title.focus()
           await page.keyboard.press('Enter')
           await expect(page).toHaveURL(/\/posts\/[^/?]+$/)
