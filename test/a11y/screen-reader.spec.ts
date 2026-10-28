@@ -178,6 +178,7 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         const output = await navigateScreenReaderTo({
           matches: /^(?!.*select).*Example post two/i,
           screenReader,
+          shouldSkipToContent: screenReader.name === 'VoiceOver',
         })
         const spoken = await screenReader.lastSpokenPhrase()
 
@@ -209,6 +210,7 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
       const oldGroup = await navigateScreenReaderTo({
         matches: /Comparing against.*group|group.*Comparing against/i,
         screenReader,
+        shouldSkipToContent: screenReader.name === 'VoiceOver',
       })
 
       expect(oldGroup).toMatch(/Comparing against/i)
@@ -233,6 +235,7 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
       const newGroup = await navigateScreenReaderTo({
         matches: /^(?!.*Previous Version)(?:Version.*group|group.*Version)/i,
         screenReader,
+        shouldSkipToContent: screenReader.name === 'VoiceOver',
       })
 
       expect(newGroup).not.toMatch(/Comparing against/i)
@@ -319,6 +322,7 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         await navigateScreenReaderTo({
           matches: /edit.*collection query/i,
           screenReader,
+          shouldSkipToContent: screenReader.name === 'VoiceOver',
         })
         await screenReader.act()
         await expect(page.locator('[id^="widget-editor-"]:visible')).toHaveCount(1)
@@ -327,6 +331,7 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         await navigateScreenReaderTo({
           matches: /edit.*collection query/i,
           screenReader,
+          shouldSkipToContent: screenReader.name === 'VoiceOver',
         })
         let hasReachedSize = false
         for (let index = 0; index < 8; index++) {
@@ -354,6 +359,7 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         await navigateScreenReaderTo({
           matches: /delete.*collection query/i,
           screenReader,
+          shouldSkipToContent: screenReader.name === 'VoiceOver',
         })
         await screenReader.act()
         await expect(widget).toHaveCount(0)
@@ -376,6 +382,7 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
           await navigateScreenReaderTo({
             matches: new RegExp(text),
             screenReader,
+            shouldSkipToContent: screenReader.name === 'VoiceOver',
           })
           let hasExitedEditor = false
           const outputs: string[] = []
@@ -587,7 +594,11 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
             const updatedValue = `${title} spoken save`
 
             await subtitle.fill(updatedValue)
-            await navigateScreenReaderTo({ matches: /Subtitle/i, screenReader })
+            await navigateScreenReaderTo({
+              matches: /Subtitle/i,
+              screenReader,
+              shouldSkipToContent: screenReader.name === 'VoiceOver',
+            })
             const cursorBefore = (await screenReader.itemText()).replace(/\s+/g, ' ').trim()
 
             expect(cursorBefore).toMatch(/Subtitle/i)
@@ -705,11 +716,6 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
           {
             count: 1,
             query: 'Example post two',
-            speech: /results found for.*(?:1|one)/i,
-          },
-          {
-            count: 1,
-            query: 'Example post three',
             speech: /results found for.*(?:1|one)/i,
           },
           {

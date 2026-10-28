@@ -513,6 +513,7 @@ export async function navigateScreenReaderTo({
   shouldEnterDialogs = false,
   shouldMoveCursorToKeyboardFocus = false,
   shouldResetCursor = true,
+  shouldSkipToContent = false,
   startAt,
 }: {
   matches: RegExp
@@ -521,6 +522,7 @@ export async function navigateScreenReaderTo({
   shouldEnterDialogs?: boolean
   shouldMoveCursorToKeyboardFocus?: boolean
   shouldResetCursor?: boolean
+  shouldSkipToContent?: boolean
   startAt?: Locator
 }) {
   await screenReader.clearItemTextLog()
@@ -540,6 +542,8 @@ export async function navigateScreenReaderTo({
     }
   }
 
+  let hasSkippedToContent = false
+
   for (let index = 0; index < maxSteps; index++) {
     const itemText = await screenReader.itemText()
     const spokenPhrase = await screenReader.lastSpokenPhrase()
@@ -550,6 +554,12 @@ export async function navigateScreenReaderTo({
         '[screen-reader-navigation]',
         JSON.stringify({ index, itemText, matches: matches.source, spokenPhrase }),
       )
+    }
+
+    if (shouldSkipToContent && !hasSkippedToContent && /^skip to content\b/i.test(itemText)) {
+      hasSkippedToContent = true
+      await screenReader.act()
+      continue
     }
 
     matches.lastIndex = 0

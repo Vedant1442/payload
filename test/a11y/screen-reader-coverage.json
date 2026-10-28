@@ -1680,6 +1680,20 @@
       "change": "Make explicit VoiceOver cursor alignment opt-in, enabled only for the deletion-checkbox scenario that passed. Other anchors use the previous no-alignment path. Keep DOM focus verification.",
       "limits": "Current shared-helper change is not AT-verified on this laptop. Original single-stop requirements remain partial. No extra traversal steps or generic scroll-area acceptance were added.",
       "next": "Pause reruns; extract the requested final cursor logs and timeout/teardown ordering for the original Group A failures, and the pending action for Group D, from already saved artifacts."
+    },
+    "pageTraversalFollowUp": {
+      "date": "2026-10-28",
+      "evidence": "Remote preserved baseline logs show all five Group A cases still traversing page chrome at about 24\u201327 steps when the 300-second timeout fires. Original traces were overwritten. VoiceOver-not-running after timeout does not establish a native crash.",
+      "tableSearch": "The final zero-result DOM assertion completed at 53.9 seconds of a 60-second budget; final capture logged, but the exact pending native call is unknown.",
+      "hypothesis": "Installed Guidepup full capture waits according to phrase length and polls for stable speech. Long traversal hints are consistent with the observed cost, without proving every timeout cause.",
+      "change": "Opt the five root-traversal cases into activating the real Skip to content link when encountered. Keep full capture, target assertions, step bounds and timeouts. Table search retains one-result to zero-result checks and removes the redundant second one-result query.",
+      "criteriaAssessed": [
+        "2.4.1 Bypass Blocks (A): real skip-link activation in test setup",
+        "2.4.3 Focus Order (A): existing target navigation assertions retained",
+        "4.1.2 Name, Role, Value (A) and 4.1.3 Status Messages (AA): existing speech assertions retained"
+      ],
+      "verification": "Targeted lint and 22-case discovery passed. Native screen-reader behavior remains unverified on this laptop.",
+      "next": "Run only table-cell speech and table-search announcement cases as a representative remote pilot. Archive test-results immediately before another run can overwrite it."
     }
   },
   "stackMigration": {
