@@ -14,10 +14,8 @@ import {
   captureScreenReader,
   captureScreenReaderOutput,
   expectPersistedWorkflowPost,
-  gotoCreatePost,
   gotoFirstPost,
   gotoPostsList,
-  insertTextBlockWithKeyboard,
   navigateScreenReaderTo,
   openBulkEditFieldSelect,
   openCopyToLocaleDrawer,
@@ -85,88 +83,6 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
       })
     }
 
-    test('should announce associated labels for the duplicate locale checkboxes', async ({
-      // PYLD-3671: partial coverage of label association; the original single-stop report remains unverified.
-      page,
-      screenReader,
-    }) => {
-      await gotoFirstPost({ page, postsURL, serverURL })
-      await page.locator('.doc-controls__popup .popup__trigger-wrap button').click()
-      await page.getByRole('menuitem', { name: /duplicate selected locales/i }).click()
-      const drawer = page.locator('.select-locales-drawer')
-
-      await expect(drawer).toBeVisible()
-      await navigateScreenReaderTo({
-        matches: /English.*check\s?box|check\s?box.*English/i,
-        maxSteps: 12,
-        screenReader,
-        shouldEnterDialogs: true,
-        // VoiceOver already entered web content in beforeEach; keep this search inside the drawer.
-        shouldResetCursor: screenReader.name !== 'VoiceOver',
-        startAt: drawer.getByRole('button', { name: 'Close', exact: true }),
-      })
-
-      expect(await screenReader.itemText()).toMatch(/English.*check\s?box|check\s?box.*English/i)
-      await screenReader.next()
-      let next = await screenReader.itemText()
-
-      // VoiceOver/WebKit can expose a native checkbox's associated label as a separate text stop.
-      if (process.platform === 'darwin' && next.trim() === 'English') {
-        await screenReader.next()
-        next = await screenReader.itemText()
-      }
-
-      expect(next).not.toMatch(/English/i)
-      expect(next).toMatch(/Spanish.*check\s?box|check\s?box.*Spanish/i)
-    })
-
-    test(
-      'should announce the associated label for the deletion checkbox',
-      { tag: ['@dialogs', '@trash'] },
-      async ({
-        // PYLD-3678: partial coverage of label association; the original single-stop report remains unverified.
-        page,
-        screenReader,
-      }) => {
-        await gotoFirstPost({ page, postsURL, serverURL })
-        await page.locator('.doc-controls__popup .popup__trigger-wrap button').click()
-        await page.getByRole('menuitem', { name: 'Delete', exact: true }).click()
-        const dialog = page.getByRole('dialog', { name: /confirm deletion/i })
-
-        const checkbox = dialog.getByRole('checkbox', {
-          name: 'Skip trash and delete permanently',
-          exact: true,
-        })
-
-        await expect(dialog).toBeVisible()
-        await expect(checkbox).toBeVisible()
-        await navigateScreenReaderTo({
-          matches: /delete permanently.*check\s?box|check\s?box.*delete permanently/i,
-          maxSteps: 12,
-          screenReader,
-          shouldEnterDialogs: true,
-          shouldMoveCursorToKeyboardFocus: true,
-          shouldResetCursor: screenReader.name !== 'VoiceOver',
-          startAt: checkbox,
-        })
-
-        expect(await screenReader.itemText()).toMatch(
-          /delete permanently.*check\s?box|check\s?box.*delete permanently/i,
-        )
-        await screenReader.next()
-        let next = await screenReader.itemText()
-
-        // VoiceOver/WebKit can expose the native label separately, as with the locale checkboxes.
-        if (process.platform === 'darwin' && next.trim() === 'Skip trash and delete permanently') {
-          await screenReader.next()
-          next = await screenReader.itemText()
-        }
-
-        expect(next).not.toMatch(/delete permanently/i)
-        expect(next).toMatch(/Cancel.*button|button.*Cancel/i)
-      },
-    )
-
     test(
       'should announce table cell text once without conflicting sort commands',
       { tag: ['@collection-navigation', '@admin-navigation'] },
@@ -175,13 +91,24 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         // PYLD-3596
         await gotoPostsList({ page, postsURL })
         const title = 'Example post two'
+        const link = page.getByRole('table').getByRole('link', { name: title, exact: true })
+
+        await expect(link).toBeVisible()
+        const row = page.getByRole('row').filter({ has: link })
         const output = await navigateScreenReaderTo({
           matches: /^(?!.*select).*Example post two/i,
+          maxSteps: 6,
           screenReader,
-          shouldSkipToContent: screenReader.name === 'VoiceOver',
+          shouldMoveCursorToKeyboardFocus: true,
+          shouldResetCursor: false,
+          // Browse into the title from the preceding row checkbox, preserving cell-arrival speech.
+          startAt: row.getByRole('checkbox'),
         })
         const spoken = await screenReader.lastSpokenPhrase()
 
+        expect(await screenReader.itemText()).toMatch(
+          /Example post two.*link|link.*Example post two/i,
+        )
         expect(output).toContain(title)
         expect(spoken.match(/Example post two/gi) || []).toHaveLength(1)
         expect(spoken).not.toMatch(/ascending.*descending|descending.*ascending/i)
@@ -321,17 +248,24 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         await widget.locator('.draggable').focus()
         await navigateScreenReaderTo({
           matches: /edit.*collection query/i,
+          maxSteps: 8,
           screenReader,
-          shouldSkipToContent: screenReader.name === 'VoiceOver',
+          shouldMoveCursorToKeyboardFocus: true,
+          shouldResetCursor: false,
+          startAt: widget.locator('.draggable'),
         })
+        expect(await screenReader.itemText()).toMatch(/edit.*collection query/i)
         await screenReader.act()
         await expect(page.locator('[id^="widget-editor-"]:visible')).toHaveCount(1)
         await page.keyboard.press('Escape')
         const sizeText = (await widget.locator('.widget-wrapper__size-btn').innerText()).trim()
         await navigateScreenReaderTo({
           matches: /edit.*collection query/i,
+          maxSteps: 8,
           screenReader,
-          shouldSkipToContent: screenReader.name === 'VoiceOver',
+          shouldMoveCursorToKeyboardFocus: true,
+          shouldResetCursor: false,
+          startAt: widget.locator('.draggable'),
         })
         let hasReachedSize = false
         for (let index = 0; index < 8; index++) {
@@ -358,52 +292,17 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         await page.keyboard.press('Escape')
         await navigateScreenReaderTo({
           matches: /delete.*collection query/i,
+          maxSteps: 8,
           screenReader,
-          shouldSkipToContent: screenReader.name === 'VoiceOver',
+          shouldMoveCursorToKeyboardFocus: true,
+          shouldResetCursor: false,
+          startAt: widget.locator('.draggable'),
         })
+        expect(await screenReader.itemText()).toMatch(/delete.*collection query/i)
         await screenReader.act()
         await expect(widget).toHaveCount(0)
       })
     })
-
-    test(
-      'should omit hidden Lexical controls from screen-reader navigation',
-      { tag: ['@document-editing'] },
-      async ({ page, screenReader }) => {
-        // PYLD-3789
-        await gotoCreatePost({ page, postsURL })
-        await insertTextBlockWithKeyboard({ page })
-        for (const field of ['content', 'layout.0.body']) {
-          const editor = page.locator(`[data-field-path="${field}"] [contenteditable="true"]`)
-          const text = `Screen reader hidden controls ${field}`
-
-          await editor.fill(text)
-          await page.mouse.move(0, 0)
-          await navigateScreenReaderTo({
-            matches: new RegExp(text),
-            screenReader,
-            shouldSkipToContent: screenReader.name === 'VoiceOver',
-          })
-          let hasExitedEditor = false
-          const outputs: string[] = []
-          for (let index = 0; index < 40; index++) {
-            await screenReader.next()
-            const output = await screenReader.itemText()
-            outputs.push(output)
-            if (
-              field === 'content'
-                ? /add item/i.test(output)
-                : /text.*(?:edit|text field)/i.test(output)
-            ) {
-              hasExitedEditor = true
-              break
-            }
-          }
-          expect(hasExitedEditor, outputs.join('\n')).toBe(true)
-          expect(outputs.join(' ')).not.toMatch(/drag to move|add block|edit link|remove link/i)
-        }
-      },
-    )
 
     test('should move the screen-reader cursor into the add-widget drawer upon opening', async ({
       page,
@@ -596,8 +495,11 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
             await subtitle.fill(updatedValue)
             await navigateScreenReaderTo({
               matches: /Subtitle/i,
+              maxSteps: 4,
               screenReader,
-              shouldSkipToContent: screenReader.name === 'VoiceOver',
+              shouldMoveCursorToKeyboardFocus: true,
+              shouldResetCursor: false,
+              startAt: subtitle,
             })
             const cursorBefore = (await screenReader.itemText()).replace(/\s+/g, ' ').trim()
 

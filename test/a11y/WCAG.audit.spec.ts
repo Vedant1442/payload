@@ -149,6 +149,34 @@ test.describe('WCAG 2.2 Level AA', () => {
   })
 
   test.describe('1.3.1 Info and Relationships (A)', () => {
+    test('should associate duplicate locale checkboxes with their visible labels', async () => {
+      // PYLD-3671: native association and operation; one VoiceOver browse stop needs manual verification.
+      await gotoFirstPost({ page, postsURL, serverURL })
+      await page.locator('.doc-controls__popup .popup__trigger-wrap button').click()
+      await page.getByRole('menuitem', { name: /duplicate selected locales/i }).click()
+      const drawer = page.locator('.select-locales-drawer')
+
+      await expect(drawer).toBeVisible()
+      await expect(drawer.getByRole('checkbox')).toHaveCount(3)
+      for (const name of ['English', 'Spanish']) {
+        const checkbox = drawer.getByRole('checkbox', { name, exact: true })
+        const id = await checkbox.getAttribute('id')
+
+        expect(id).toBeTruthy()
+        expect(
+          await checkbox.evaluate((input: HTMLInputElement) =>
+            Array.from(input.labels || []).map((label) => label.textContent?.trim()),
+          ),
+        ).toEqual([name])
+        await expect(page.locator(`[id="${id}"]`)).toHaveCount(1)
+        await drawer.locator(`label[for="${id}"]`).click()
+        await expect(checkbox).toBeChecked()
+        await checkbox.focus()
+        await checkbox.press('Space')
+        await expect(checkbox).not.toBeChecked()
+      }
+    })
+
     test('should name the live preview frame by its purpose', async () => {
       // pyld-3807
       await openLivePreview({ page, postsURL, serverURL })
@@ -5915,6 +5943,43 @@ test.describe('WCAG 2.2 Level AA', () => {
   })
 
   test.describe('2.4.3 Focus Order (A)', () => {
+    test('should exclude hidden Lexical controls from the accessibility tree', async () => {
+      // PYLD-3789: both top-level and Blocks editors, with actual hidden controls present.
+      await gotoCreatePost({ page, postsURL })
+      await insertTextBlockWithKeyboard({ page })
+      for (const field of ['content', 'layout.0.body']) {
+        const container = page.locator(`[data-field-path="${field}"]`)
+        const editor = container.locator('[contenteditable="true"]')
+        const hiddenNames = /^(Drag to move|Add block|Edit link|Remove link)$/
+
+        await editor.fill(`Hidden controls ${field}`)
+        await page.mouse.move(0, 0)
+        const handles = container.locator('.draggable-block-menu__button, .add-block-menu')
+
+        await expect(handles).toHaveCount(2)
+        for (const control of await handles.all()) {
+          await expect(control).toBeHidden()
+          await expect.poll(() => control.ariaSnapshot()).toBe('')
+        }
+        await expect(container.getByRole('button', { name: hiddenNames })).toHaveCount(0)
+        const linkControls = container.locator('.link-editor .link-edit, .link-editor .link-trash')
+
+        await expect(linkControls).toHaveCount(2)
+
+        for (const control of await linkControls.all()) {
+          await expect(control).toBeHidden()
+          expect(await control.ariaSnapshot()).toBe('')
+        }
+        await editor.locator('p').first().hover()
+        const drag = container.getByRole('button', { name: 'Drag to move', exact: true })
+
+        await expect(drag).toBeVisible()
+        await expect(drag).toHaveAccessibleName('Drag to move')
+        await page.mouse.move(0, 0)
+        await expect(drag).toHaveCount(0)
+      }
+    })
+
     test('should restore submit focus after an asynchronous custom response handler completes', async () => {
       const responseURL = '**/api/a11y-custom-response'
 
@@ -9814,7 +9879,7 @@ test.describe('WCAG 2.2 Level AA', () => {
       'should use a native checkbox label without inferring an ARIA reference from its name',
       { tag: ['@trash'] },
       async () => {
-        // PYLD-3817
+        // PYLD-3817, PYLD-3678: native association; one VoiceOver browse stop needs manual verification.
         await gotoFirstPost({ page, postsURL, serverURL })
         await page.locator('.doc-controls__popup .popup__trigger-wrap button').click()
         await page.getByRole('menuitem', { name: 'Delete', exact: true }).click()
@@ -9823,6 +9888,11 @@ test.describe('WCAG 2.2 Level AA', () => {
 
         await expect(checkbox).toBeVisible()
         await expect(checkbox).toHaveAccessibleName('Skip trash and delete permanently')
+        expect(
+          await checkbox.evaluate((input: HTMLInputElement) =>
+            Array.from(input.labels || []).map((label) => label.textContent?.trim()),
+          ),
+        ).toEqual(['Skip trash and delete permanently'])
         await checkbox.focus()
         await checkbox.press('Space')
         await expect(checkbox).toBeChecked()

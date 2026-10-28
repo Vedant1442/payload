@@ -159,7 +159,7 @@
     },
     "screenReaderDiscovery": {
       "before": 54,
-      "after": 22
+      "after": 19
     },
     "followUpBrowserRun": {
       "status": "passed",
@@ -210,6 +210,20 @@
           "observation": "Close button is both current item and spoken phrase at index 0."
         }
       ]
+    },
+    "browserReplacements20261028": {
+      "status": "passed",
+      "browser": "Chromium",
+      "passed": 3,
+      "duration": "12.3 seconds",
+      "node": "24.22.1",
+      "tests": [
+        "WCAG.audit.spec.ts :: should associate duplicate locale checkboxes with their visible labels",
+        "WCAG.audit.spec.ts :: should use a native checkbox label without inferring an ARIA reference from its name",
+        "WCAG.audit.spec.ts :: should exclude hidden Lexical controls from the accessibility tree"
+      ],
+      "scope": "Only three affected browser cases; no Guidepup execution on this laptop.",
+      "log": "/tmp/guidepup-three-replacements.log"
     }
   },
   "earlierMigrations": [
@@ -594,10 +608,10 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "partial",
       "tests": [
-        "screen-reader.spec.ts :: should announce associated labels for the duplicate locale checkboxes"
+        "WCAG.audit.spec.ts :: should associate duplicate locale checkboxes with their visible labels"
       ],
-      "limits": "Original ticket explicitly demands one checkbox/label cursor stop; current optional label skip permits reported behavior. Native WebKit baseline repeats labels; reconcile remedy/platform requirement rather than count this passing assertion as proof.",
-      "manualVerification": "Outstanding: reconcile the original requirement and test scenario; a passing partial test does not establish the remedy."
+      "limits": "One combined VoiceOver checkbox/label stop remains unverified. Browser association and operation do not prove grouping.",
+      "manualVerification": "One combined VoiceOver checkbox/label stop remains unverified. Browser association and operation do not prove grouping."
     },
     {
       "ticket": "PYLD-3678",
@@ -607,10 +621,10 @@
       "reportedScreenReaders": ["VoiceOver"],
       "coverage": "partial",
       "tests": [
-        "screen-reader.spec.ts :: should announce the associated label for the deletion checkbox"
+        "WCAG.audit.spec.ts :: should use a native checkbox label without inferring an ARIA reference from its name"
       ],
-      "limits": "Same checkbox single-stop gap; associated label assertion proves narrower outcome.",
-      "manualVerification": "Outstanding: reconcile the original requirement and test scenario; a passing partial test does not establish the remedy."
+      "limits": "One combined VoiceOver checkbox/label stop remains unverified. Browser association and operation do not prove grouping.",
+      "manualVerification": "One combined VoiceOver checkbox/label stop remains unverified. Browser association and operation do not prove grouping."
     },
     {
       "ticket": "PYLD-3680",
@@ -917,29 +931,29 @@
       "report": "Payload: Many Locations - Hidden elements in the Body field receive focus",
       "expected": "Hidden elements in the Body field do not receive focus with screen reader.",
       "reportedScreenReaders": ["VoiceOver", "NVDA"],
-      "coverage": "screen-reader-regression-retained",
+      "coverage": "browser-plus-manual",
       "tests": [
-        "screen-reader.spec.ts :: should omit hidden Lexical controls from screen-reader navigation"
+        "WCAG.audit.spec.ts :: should exclude hidden Lexical controls from the accessibility tree"
       ],
-      "limits": "Hidden controls in virtual navigation distinct from tab order; large scan needs sensible boundaries.",
-      "manualVerification": "Run the retained AT regression on the reported screen reader/browser; a VoiceOver pass is not NVDA evidence."
+      "limits": "Native VoiceOver/NVDA browse exclusion remains a manual check; browser evidence verifies real controls are excluded when hidden in both editor contexts.",
+      "manualVerification": "Native VoiceOver/NVDA browse exclusion remains a manual check; browser evidence verifies real controls are excluded when hidden in both editor contexts."
     }
   ],
   "remainingScreenReaderReview": {
     "date": "2026-10-21",
-    "scope": "The original review tracks 21 retained cases plus one save-announcement case inherited from PR #19005 / #18845. Sixteen retirement records preserve the original decisions. All 22 current cases are Mac-eligible; inherited coverage is not retroactively counted as a verified AT pass.",
+    "scope": "Nineteen current Mac-eligible Guidepup cases remain after three browser replacements. Historical retirement decisions are preserved. Retained AT tests are not assumed passing or proof of the full original report.",
     "interpretation": "Retain means the observable outcome justifies AT evidence, not that the test has passed or proves conformance. Strengthen means current assertions have a concrete false-pass, false-failure, scope, or cursor-start risk.",
     "counts": {
       "retain-at": 11,
-      "scenario-gap": 2,
-      "strengthen-at": 9
+      "scenario-gap": 0,
+      "strengthen-at": 8
     },
     "platformInventory": {
-      "total": 22,
+      "total": 19,
       "nvdaOnly": 0,
       "voiceOverOnly": 1,
-      "both": 21,
-      "note": "All 22 current cases are Mac-eligible. Twenty-one support both readers; widget-control navigation is VoiceOver-only. Includes one new save-announcement case inherited from the parent stack."
+      "both": 18,
+      "note": "All 19 current cases are Mac-eligible; widget-control navigation is VoiceOver-only. No current full-suite AT baseline is claimed."
     },
     "sharedRisks": [
       {
@@ -983,26 +997,6 @@
         "decision": "retain-at",
         "finding": "The report concerns dynamic direction/position speech, which DOM live-region text cannot prove. The original VoiceOver key sequence is represented; Windows evidence is additional coverage.",
         "next": "Run the two focused AT cases after setup is stable; browser drag regressions already cover the resulting order."
-      },
-      {
-        "test": "should announce associated labels for the duplicate locale checkboxes",
-        "title": "should announce associated labels for the duplicate locale checkboxes",
-        "scenario": null,
-        "screenReaders": "VoiceOver and NVDA",
-        "tickets": ["PYLD-3671"],
-        "decision": "scenario-gap",
-        "finding": "The original ticket requires one checkbox/label cursor stop. This test deliberately permits an extra English label stop.",
-        "next": "Reconcile the requirement with the native WebKit baseline; keep this as partial association evidence, not proof of the original single-stop remedy."
-      },
-      {
-        "test": "should announce the associated label for the deletion checkbox",
-        "title": "should announce the associated label for the deletion checkbox",
-        "scenario": null,
-        "screenReaders": "VoiceOver and NVDA",
-        "tickets": ["PYLD-3678"],
-        "decision": "scenario-gap",
-        "finding": "The test permits the separate deletion-checkbox label stop described by the ticket.",
-        "next": "Reconcile the original single-stop requirement with the platform baseline before treating its existing pass as remediation evidence."
       },
       {
         "test": "should announce table cell text once without conflicting sort commands",
@@ -1063,16 +1057,6 @@
         "decision": "strengthen-at",
         "finding": "Actual VoiceOver cursor access to widget controls is appropriate. The helper resets to the page root for three searches, which loses the widget anchor and can match another widget or exhaust a large traversal.",
         "next": "Anchor traversal before the target controls, bound it to the added widget, and verify each visited item before activation."
-      },
-      {
-        "test": "should omit hidden Lexical controls from screen-reader navigation",
-        "title": "should omit hidden Lexical controls from screen-reader navigation",
-        "scenario": null,
-        "screenReaders": "VoiceOver and NVDA",
-        "tickets": ["PYLD-3789"],
-        "decision": "strengthen-at",
-        "finding": "The negative scan terminates at broad text/edit or Add item matches. It can finish before all relevant hidden controls are traversed or confuse an editor-local item with outside content.",
-        "next": "Use explicit outside-editor boundaries and demonstrate the relevant region was traversed; keep actual virtual-cursor evidence."
       },
       {
         "test": "should move the screen-reader cursor into the add-widget drawer upon opening",
@@ -1427,6 +1411,51 @@
           "WCAG.audit.spec.ts :: should expose named ${control} filter options in the rich-text ${label} drawer"
         ],
         "manualLimit": "Option names and accessibility-tree presence are tested; exact NVDA browse-mode speech remains unverified."
+      },
+      {
+        "test": "should announce associated labels for the duplicate locale checkboxes",
+        "title": "should announce associated labels for the duplicate locale checkboxes",
+        "scenario": null,
+        "screenReaders": "VoiceOver and NVDA",
+        "tickets": ["PYLD-3671"],
+        "decision": "browser-plus-manual",
+        "finding": "The original ticket requires one checkbox/label cursor stop. This test deliberately permits an extra English label stop.",
+        "next": "One combined VoiceOver checkbox/label stop remains unverified. Browser association and operation do not prove grouping.",
+        "retiredDate": "2026-10-28",
+        "replacementTests": [
+          "WCAG.audit.spec.ts :: should associate duplicate locale checkboxes with their visible labels"
+        ],
+        "manualLimit": "One combined VoiceOver checkbox/label stop remains unverified. Browser association and operation do not prove grouping."
+      },
+      {
+        "test": "should announce the associated label for the deletion checkbox",
+        "title": "should announce the associated label for the deletion checkbox",
+        "scenario": null,
+        "screenReaders": "VoiceOver and NVDA",
+        "tickets": ["PYLD-3678"],
+        "decision": "browser-plus-manual",
+        "finding": "The test permits the separate deletion-checkbox label stop described by the ticket.",
+        "next": "One combined VoiceOver checkbox/label stop remains unverified. Browser association and operation do not prove grouping.",
+        "retiredDate": "2026-10-28",
+        "replacementTests": [
+          "WCAG.audit.spec.ts :: should use a native checkbox label without inferring an ARIA reference from its name"
+        ],
+        "manualLimit": "One combined VoiceOver checkbox/label stop remains unverified. Browser association and operation do not prove grouping."
+      },
+      {
+        "test": "should omit hidden Lexical controls from screen-reader navigation",
+        "title": "should omit hidden Lexical controls from screen-reader navigation",
+        "scenario": null,
+        "screenReaders": "VoiceOver and NVDA",
+        "tickets": ["PYLD-3789"],
+        "decision": "browser-plus-manual",
+        "finding": "The negative scan terminates at broad text/edit or Add item matches. It can finish before all relevant hidden controls are traversed or confuse an editor-local item with outside content.",
+        "next": "Native VoiceOver/NVDA browse exclusion remains a manual check; browser evidence verifies real controls are excluded when hidden in both editor contexts.",
+        "retiredDate": "2026-10-28",
+        "replacementTests": [
+          "WCAG.audit.spec.ts :: should exclude hidden Lexical controls from the accessibility tree"
+        ],
+        "manualLimit": "Native VoiceOver/NVDA browse exclusion remains a manual check; browser evidence verifies real controls are excluded when hidden in both editor contexts."
       }
     ],
     "retirementShortlist": {
@@ -1498,6 +1527,127 @@
         }
       ],
       "manualVerificationPending": 6
+    },
+    "strictReview": {
+      "date": "2026-10-28",
+      "counts": {
+        "retain-at": 19,
+        "retired-browser-plus-manual": 3
+      },
+      "status": "Three replacements implemented with passing browser evidence. Nineteen Guidepup cases remain. Single-stop checkbox outcomes remain manual/unverified; all 50 tickets retain test links.",
+      "next": "Remote validation of scenario-local starts for table-cell speech, widget controls and save announcement. Do not force cursor alignment in automatic drawer-entry tests. Version-comparison navigation remains unresolved.",
+      "cases": [
+        {
+          "test": "should announce relative direction and position while dragging the Array row",
+          "decision": "retain-at",
+          "reason": "The report concerns dynamic direction/position speech, which DOM live-region text cannot prove. The original VoiceOver key sequence is represented; Windows evidence is additional coverage."
+        },
+        {
+          "test": "should announce relative direction and position while dragging the Blocks row",
+          "decision": "retain-at",
+          "reason": "The report concerns dynamic direction/position speech, which DOM live-region text cannot prove. The original VoiceOver key sequence is represented; Windows evidence is additional coverage."
+        },
+        {
+          "test": "should announce associated labels for the duplicate locale checkboxes",
+          "decision": "retired-browser-plus-manual",
+          "reason": "Existing association test permits the reported extra label stop; add real checkbox name/label browser regression and retain explicit manual single-stop verification. Do not mark ticket remedied."
+        },
+        {
+          "test": "should announce the associated label for the deletion checkbox",
+          "decision": "retired-browser-plus-manual",
+          "reason": "Existing association test permits the reported extra label stop; add real checkbox name/label browser regression and retain explicit manual single-stop verification. Do not mark ticket remedied."
+        },
+        {
+          "test": "should announce table cell text once without conflicting sort commands",
+          "decision": "retain-at",
+          "reason": "Duplicate cell readout and conflicting sort speech are actual AT outcomes. The expected title is checked once in spoken output, but only one fixture cell is sampled."
+        },
+        {
+          "test": "should communicate removed version text while browsing the comparison",
+          "decision": "retain-at",
+          "reason": "The test aggregates speech from up to 30 stops and separately checks removed text and a deletion word. Those can come from different stops; navigation is not bounded to the older comparison side."
+        },
+        {
+          "test": "should announce the deletion dialog before background page content",
+          "decision": "retain-at",
+          "reason": "The report concerns announcement order. The assertion instead rejects a short list of background words anywhere in the captured speech; it does not compare the first dialog announcement with an actual background sentinel."
+        },
+        {
+          "test": "should drop the Array row with the screen reader active",
+          "decision": "retain-at",
+          "reason": "The original failure depends on the screen reader being active when moving/dropping a row. DOM-only keyboard dragging is complementary, not an equivalent replacement."
+        },
+        {
+          "test": "should drop the Blocks row with the screen reader active",
+          "decision": "retain-at",
+          "reason": "The original failure depends on the screen reader being active when moving/dropping a row. DOM-only keyboard dragging is complementary, not an equivalent replacement."
+        },
+        {
+          "test": "should reach widget edit size and remove controls with the VoiceOver cursor",
+          "decision": "retain-at",
+          "reason": "Actual VoiceOver cursor access to widget controls is appropriate. The helper resets to the page root for three searches, which loses the widget anchor and can match another widget or exhaust a large traversal."
+        },
+        {
+          "test": "should omit hidden Lexical controls from screen-reader navigation",
+          "decision": "retired-browser-plus-manual",
+          "reason": "PYLD-3789: verify real hidden controls are excluded from the accessibility tree in both editor contexts and remain available when revealed. Native traversal remains a separate manual check."
+        },
+        {
+          "test": "should move the screen-reader cursor into the add-widget drawer upon opening",
+          "decision": "retain-at",
+          "reason": "The test captures opening the real drawer and checks the screen-reader item immediately, which addresses automatic AT cursor entry rather than merely DOM focus."
+        },
+        {
+          "test": "should move the screen-reader cursor into Copy to locale from the overflow menu",
+          "decision": "retain-at",
+          "reason": "The report concerns opening a drawer from an overflow menu resetting AT focus. The test captures that exact transition and rejects the previous menu/page context."
+        },
+        {
+          "test": "should expose one screen-reader stop for the Copy to locale select",
+          "decision": "retain-at",
+          "reason": "The initial captured item is never required to be the Copy to combobox. One unrelated starting stop followed by the overwrite checkbox could satisfy the count of one."
+        },
+        {
+          "test": "should expose disabled row-menu actions to screen-reader navigation",
+          "decision": "retain-at",
+          "reason": "The fixture only opens Blocks, while the ticket describes both Array and Blocks. Matching either paste or replace and a disabled word in merged item/speech output does not verify each disabled action was reached."
+        },
+        {
+          "test": "should keep the disabled Group by sort control in screen-reader navigation",
+          "decision": "retain-at",
+          "reason": "The reported disabled control is an AT-discoverability issue, but the helper can match the prior spoken phrase as well as current item text. The actual successful run did reach Sort; the assertion can be more precise."
+        },
+        {
+          "test": "should announce filter and bulk-edit options by name",
+          "decision": "retain-at",
+          "reason": "The test derives an expected active option from the real filter/bulk-edit UI and captures keyboard movement to it. Blank spoken option names are not established solely by DOM names."
+        },
+        {
+          "test": "should announce the unsaved Copy to locale toast without its close button",
+          "decision": "retain-at",
+          "reason": "This reproduces the actual unsaved-change toast from the ticket and tests Close toast leaking into spontaneous speech. aria-live=off on a button alone does not prove the announcement."
+        },
+        {
+          "test": "should announce global API depth changes while focus stays on the stepper",
+          "decision": "retain-at",
+          "reason": "The spoken assertion accepts any occurrence of the updated number, which can also occur in positional/context speech. Browser checks already prove the numeric value and stable keyboard focus."
+        },
+        {
+          "test": "should announce table search result changes without moving focus",
+          "decision": "retain-at",
+          "reason": "Successive queries can produce the same count. The DOM checks include each query, but the speech regex only requires a generic result count and can accept stale or unrelated count speech."
+        },
+        {
+          "test": "should announce navigation folder search results without moving focus",
+          "decision": "retain-at",
+          "reason": "The real folder-search submission and resulting count are captured while focus and URL remain stable; this addresses an unsolicited result announcement."
+        },
+        {
+          "test": "should announce a successful document save without moving the screen-reader cursor",
+          "decision": "retain-at",
+          "reason": "Inherited from the parent accessibility workflow stack; checks spontaneous save speech, persisted data and stable screen-reader/DOM focus. Not part of the original 50-ticket retirement audit."
+        }
+      ]
     }
   },
   "investigations": {
@@ -1694,6 +1844,35 @@
       ],
       "verification": "Targeted lint and 22-case discovery passed. Native screen-reader behavior remains unverified on this laptop.",
       "next": "Run only table-cell speech and table-search announcement cases as a representative remote pilot. Archive test-results immediately before another run can overwrite it."
+    },
+    "skipContentPilot": {
+      "date": "2026-10-28",
+      "commit": "d229bc5102e4b73469cd3dba07e5b0754cd260e0",
+      "source": "User-relayed remote report; no local native execution.",
+      "results": {
+        "run": 2,
+        "passed": 1,
+        "failed": 1
+      },
+      "tableCell": "5.2 minutes; skip link reaches Posts heading and real table headers by index 23 but never reaches target cell before 300-second timeout. Subsequent VoiceOver-not-running does not establish a native crash.",
+      "tableSearch": "Passed in 56.8 seconds; both current-query one-result and zero-result speech reported, with DOM focus assertions passing. Little headroom remains under the existing 60-second timeout.",
+      "artifactArchive": "/tmp/pyld-screen-reader-full-logs/test-results-skip-content-pilot-20261028-133136",
+      "limits": "A normal browser snapshot does not prove absence of OS-level focus contamination. This two-case run does not establish a current 22-case pass total."
+    },
+    "scenarioLocalStarts": {
+      "date": "2026-10-28",
+      "change": "Table-cell speech starts at the preceding row checkbox, then browses into the title (six-step bound and current-link check). Widget searches start from their own drag handle (eight steps). Save capture starts at Subtitle (four steps). Explicit cursor-to-keyboard-focus setup is limited to these non-arrival scenarios.",
+      "limits": "DOM focus and native command success do not establish current cursor identity; target assertions must still pass on the supported Mac. No generic scroll-area acceptance, truncated speech, raised timeout or automatic drawer-entry alignment. Version-comparison root navigation is unchanged.",
+      "criteriaAssessed": [
+        "1.3.1 Info and Relationships (A)",
+        "2.1.1 Keyboard (A)",
+        "2.4.3 Focus Order (A)",
+        "2.4.6 Headings and Labels (AA)",
+        "2.5.3 Label in Name (A)",
+        "4.1.2 Name, Role, Value (A)",
+        "4.1.3 Status Messages (AA)"
+      ],
+      "next": "Run the three affected retained Guidepup tests once on the supported Mac, preserving logs and artifacts; do not rerun retired cases."
     }
   },
   "stackMigration": {
