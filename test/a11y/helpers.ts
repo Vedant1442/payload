@@ -1023,7 +1023,13 @@ export async function addCollectionQueryWidget({ page }: { page: Page }) {
   await expect(widgets).toHaveCount(previousCount + 1)
   await expect(widgets.last().locator('.collection-query-widget')).toBeVisible()
   await expect(widgets.last().locator('.draggable')).toBeFocused()
-  return widgets.last()
+  const widgetID = await widgets.last().getAttribute('data-slug')
+
+  if (!widgetID) {
+    throw new Error('Added Collection Query widget has no ID')
+  }
+
+  return page.locator(`.widget[data-slug="${widgetID}"]`)
 }
 
 export async function insertTextBlockWithKeyboard({ page }: { page: Page }) {

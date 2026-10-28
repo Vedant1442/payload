@@ -91,7 +91,9 @@ test.describe('WCAG 2.2 Level AA — Screen readers', () => {
         // PYLD-3596
         await gotoPostsList({ page, postsURL })
         const title = 'Example post two'
-        const link = page.getByRole('table').getByRole('link', { name: title, exact: true })
+        const link = page
+          .getByRole('grid', { name: 'Posts', exact: true })
+          .getByRole('link', { name: title, exact: true })
 
         await expect(link).toBeVisible()
         const row = page.getByRole('row').filter({ has: link })

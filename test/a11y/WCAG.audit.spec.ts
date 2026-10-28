@@ -6606,6 +6606,13 @@ test.describe('WCAG 2.2 Level AA', () => {
       await expect(widget.locator('.widget-wrapper__size-btn')).toBeFocused()
       await page.keyboard.press('Shift+Tab')
       await expect(widget.locator('.widget-wrapper__edit-btn')).toBeFocused()
+      const queryWidgets = page.locator('.widget[data-slug^="collection-query-"]')
+      const countBeforeDelete = await queryWidgets.count()
+
+      expect(countBeforeDelete).toBeGreaterThan(1)
+      await widget.locator('.widget-wrapper__delete-btn').press('Enter')
+      await expect(queryWidgets).toHaveCount(countBeforeDelete - 1)
+      await expect(widget).toHaveCount(0)
     })
 
     test(

@@ -1873,6 +1873,32 @@
         "4.1.3 Status Messages (AA)"
       ],
       "next": "Run the three affected retained Guidepup tests once on the supported Mac, preserving logs and artifacts; do not rerun retired cases."
+    },
+    "post403e6472": {
+      "date": "2026-10-28",
+      "commit": "403e6472d055cfd28855576a2c1e5f652b6b56f6",
+      "source": "User-relayed remote report; three selected cases all failed.",
+      "observations": {
+        "table": "34.5 seconds: wrong table-role selector fails before AT navigation. Posts is a grid; Example post two is explicitly seeded. No evidence of a missing-fixture dependency.",
+        "widget": "3.5 minutes: native navigation reaches and activates Edit, Resize and Delete. Final live .last() locator can resolve a different widget after deletion.",
+        "save": "58.2 seconds: captured Subtitle insertion speech instead of success speech. DOM toast and persisted-save checks completed, but native announcement timing/root cause remain unestablished."
+      },
+      "fixes": [
+        "Use the actual named Posts grid to locate the target title.",
+        "Return a locator bound to the newly added widget ID, instead of a live last-widget locator. Extend existing browser regression to delete with other query widgets present and verify both count reduction and disappearance of that specific widget."
+      ],
+      "browserEvidence": {
+        "before": "Extended widget regression reproduced the exact toHaveCount(0) failure after total count had already decreased.",
+        "after": "Two directly related Chromium browser regressions passed in 8.4 seconds on Node 24.22.1.",
+        "log": "/tmp/guidepup-widget-grid-after.log"
+      },
+      "criteriaAssessed": [
+        "1.3.1 Info and Relationships (A): actual grid semantics",
+        "2.1.1 Keyboard (A): widget keyboard deletion",
+        "2.4.3 Focus Order (A): existing widget navigation retained",
+        "4.1.3 Status Messages (AA): save speech remains unverified"
+      ],
+      "next": "Read native speech-log attachments in the archived save trace before another AT run. Do not weaken the save assertion or claim a product speech defect from the single capture."
     }
   },
   "stackMigration": {
