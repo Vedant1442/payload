@@ -108,29 +108,22 @@ test.suite('File transform state', { config: './config.ts' }, () => {
     expect(created._transforms).toBeNull()
   })
 
-  test('should reject a reserved built-in key that nothing applies yet', async ({ payload }) => {
+  test('should reject a built-in key that no transformer applies', async ({ payload }) => {
     await expect(
       createImage({ payload, _transforms: { resize: { width: 100 } } }),
     ).rejects.toMatchObject({
-      data: {
-        errors: [
-          expect.objectContaining({
-            message: expect.stringContaining('resize'),
-            path: '_transforms',
-          }),
-        ],
-      },
+      data: { errors: [expect.objectContaining({ path: '_transforms.resize' })] },
     })
   })
 
-  test('should keep unknown custom keys unchanged', async ({ payload }) => {
-    const created = await createImage({
-      payload,
-      _transforms: { watermark: { opacity: 0.5, position: 'bottom-right' } },
-    })
-
-    expect(created._transforms).toEqual({
-      watermark: { opacity: 0.5, position: 'bottom-right' },
+  test('should reject a custom key that no transformer applies', async ({ payload }) => {
+    await expect(
+      createImage({
+        payload,
+        _transforms: { watermark: { opacity: 0.5, position: 'bottom-right' } },
+      }),
+    ).rejects.toMatchObject({
+      data: { errors: [expect.objectContaining({ path: '_transforms.watermark' })] },
     })
   })
 

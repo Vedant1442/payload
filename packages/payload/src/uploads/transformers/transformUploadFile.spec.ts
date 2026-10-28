@@ -34,6 +34,7 @@ describe('transformUploadFile', () => {
     })
 
     const result = await transformUploadFile({
+      claims: new Map(),
       collectionSlug: 'media',
       file: new File(['original'], 'logo.png'),
       ...makeDocs(),
@@ -58,6 +59,7 @@ describe('transformUploadFile', () => {
     const second = makeTransformer({ slug: 'second', transformFile: vi.fn() })
 
     const result = await transformUploadFile({
+      claims: new Map(),
       collectionSlug: 'media',
       file: new File(['original'], 'logo.png'),
       ...makeDocs(),
@@ -80,6 +82,7 @@ describe('transformUploadFile', () => {
 
     await expect(
       transformUploadFile({
+        claims: new Map(),
         collectionSlug: 'media',
         file: new File(['original'], 'logo.png'),
         ...makeDocs(),
@@ -124,6 +127,7 @@ describe('transformUploadFile', () => {
     })
 
     await transformUploadFile({
+      claims: new Map(),
       collectionSlug: 'media',
       file: new File(['resized'], 'logo.png'),
       ...makeDocs(),
@@ -154,6 +158,7 @@ describe('transformUploadFile', () => {
     const docs = makeDocs()
 
     const result = await transformUploadFile({
+      claims: new Map(),
       collectionSlug: 'media',
       file: new File(['original'], 'logo.png'),
       ...docs,
@@ -173,6 +178,55 @@ describe('transformUploadFile', () => {
     expect(docs.originalDoc._transforms).toBeNull()
   })
 
+  it('should reject a stage that changes a _transforms key another stage claims, and stop the pipeline', async () => {
+    const first = makeTransformer({
+      slug: 'first',
+      transformFile: vi.fn(({ doc }) => {
+        doc._transforms = { crop: { height: 1, width: 1, x: 0, y: 0 } }
+        return Promise.resolve({ status: 'continue' as const })
+      }),
+    })
+    const second = makeTransformer({ slug: 'second', transformFile: vi.fn() })
+
+    const result = transformUploadFile({
+      claims: new Map([[second, ['crop']]]),
+      collectionSlug: 'media',
+      file: new File(['original'], 'logo.png'),
+      ...makeDocs(),
+      options: undefined,
+      originalFile: new File(['original'], 'logo.png'),
+      pipeline: [first, second],
+      req: makeReq(),
+    })
+
+    await expect(result).rejects.toThrow(TransformerContractError)
+    await expect(result).rejects.toThrow(/"first".*_transforms\.crop.*"second"/)
+    expect(second.transformFile).not.toHaveBeenCalled()
+  })
+
+  it('should let a stage change a _transforms key it claims itself', async () => {
+    const first = makeTransformer({
+      slug: 'first',
+      transformFile: vi.fn(({ doc }) => {
+        doc._transforms = { score: 2 }
+        return Promise.resolve({ status: 'continue' as const })
+      }),
+    })
+
+    const result = await transformUploadFile({
+      claims: new Map([[first, ['score']]]),
+      collectionSlug: 'media',
+      file: new File(['original'], 'logo.png'),
+      ...makeDocs(),
+      options: undefined,
+      originalFile: new File(['original'], 'logo.png'),
+      pipeline: [first],
+      req: makeReq(),
+    })
+
+    expect(result.doc._transforms).toEqual({ score: 2 })
+  })
+
   it.each([
     ['change a field', (doc: Record<string, unknown>) => (doc.alt = 'changed')],
     ['add a field', (doc: Record<string, unknown>) => (doc.width = 10)],
@@ -190,6 +244,7 @@ describe('transformUploadFile', () => {
       const second = makeTransformer({ slug: 'second', transformFile: vi.fn() })
 
       const result = transformUploadFile({
+        claims: new Map(),
         collectionSlug: 'media',
         file: new File(['original'], 'logo.png'),
         ...makeDocs(),
